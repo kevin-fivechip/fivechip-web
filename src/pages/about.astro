@@ -1,0 +1,150 @@
+---
+import CallToAction from "../components/CallToAction.astro";
+import Container from "../components/Container.astro";
+import Icon from "../components/Icon.astro";
+import PageHeader from "../components/PageHeader.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../site";
+
+// Career facts come from Kevin's résumé; keep them accurate when editing.
+const career = [
+  {
+    years: "1994 – 2012",
+    title: "Semiconductor manufacturing",
+    text: "Process engineering at Plasma-Therm, then process control architecture at Seagate Technology, where a run-to-run control system I designed is still in use in four countries, 20 years later. Co-author of SEMI standard E133.1.",
+  },
+  {
+    years: "2012 – 2024",
+    title: "Software architecture",
+    text: "Consulting with Object Partners, then six years at Best Buy as lead Kafka architect and engineering associate director for its event-driven order management platform.",
+  },
+  {
+    years: "2024 – 2026",
+    title: "Principal consultant",
+    text: "At Improving, I modernized a county government system with zero outages and architected an AI platform for court filings where every answer traces back to its source.",
+  },
+  {
+    years: "2026",
+    title: site.name,
+    text: "Independent, and bringing the same approach directly to your teams.",
+  },
+];
+
+const credentials = [
+  "B.S., Electrical Engineering, University of Cincinnati",
+  "Six Sigma trained",
+  "ISO 9001 Lead Auditor (manufacturing)",
+  "Co-author, SEMI standard E133.1",
+  "Systems Thinking and Risk Management, University of St. Thomas",
+  "Temporal Certified Trainer",
+];
+
+const values = [
+  {
+    title: "Problem before solution",
+    text: "We agree on what's wrong before any code is written.",
+  },
+  {
+    title: "Straight talk",
+    text: "If politics, budget, or technology is holding a project back, I'll say so, and bring options.",
+  },
+  {
+    title: "Small, safe steps",
+    text: "Working releases early, each with a way to roll back.",
+  },
+  {
+    title: "You own everything",
+    text: "Your code, your accounts, and your data. No lock-in.",
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description={`${site.name} is the independent practice of ${site.owner}, a software architect with a manufacturing engineer's discipline.`}
+>
+  <PageHeader
+    eyebrow="About"
+    title="A manufacturing engineer's discipline, applied to software."
+    intro={`I'm ${site.owner}. ${site.name} is my independent practice: I find the real problem, then architect and build the solution.`}
+  />
+
+  <section class="py-16 sm:py-20" aria-labelledby="career-heading">
+    <Container>
+      <div class="max-w-2xl">
+        <p class="eyebrow">My path</p>
+        <h2 id="career-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          From the cleanroom to the cloud.
+        </h2>
+        <p class="mt-4 text-lg leading-8 text-slate-600">
+          In a semiconductor fab, a wrong assumption can scrap a batch of wafers. I've carried that discipline
+          through more than thirty years of engineering.
+        </p>
+      </div>
+      <ol class="mt-12 space-y-10 border-l-2 border-slate-200 pl-6 sm:pl-8">
+        {
+          career.map((era) => (
+            <li class="relative">
+              <span
+                aria-hidden="true"
+                class="absolute top-1.5 -left-[33px] size-4 rounded-full border-2 border-white bg-brand-600 ring-2 ring-brand-100 sm:-left-[41px]"
+              />
+              <p class="text-sm font-semibold text-brand-700">{era.years}</p>
+              <h3 class="mt-1 text-xl font-semibold">{era.title}</h3>
+              <p class="mt-2 max-w-3xl leading-7 text-slate-600">{era.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </Container>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-16 sm:py-20" aria-labelledby="credentials-heading">
+    <Container>
+      <div class="max-w-2xl">
+        <p class="eyebrow">Education and credentials</p>
+        <h2 id="credentials-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          Trained as an engineer, first.
+        </h2>
+      </div>
+      <ul class="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2">
+        {
+          credentials.map((credential) => (
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-1 size-5 shrink-0 text-brand-600" />
+              <span class="leading-7 text-slate-700">{credential}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <section class="py-16 sm:py-20" aria-labelledby="values-heading">
+    <Container>
+      <div class="max-w-2xl">
+        <p class="eyebrow">What you can expect</p>
+        <h2 id="values-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          How every engagement runs.
+        </h2>
+      </div>
+      <ul class="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+        {
+          values.map((value) => (
+            <li class="flex gap-4">
+              <span class="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+                <Icon name="check" class="size-5" />
+              </span>
+              <div>
+                <h3 class="text-lg font-semibold">{value.title}</h3>
+                <p class="mt-1 leading-7 text-slate-600">{value.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <CallToAction />
+</BaseLayout>

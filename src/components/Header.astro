@@ -1,0 +1,76 @@
+---
+import Container from "./Container.astro";
+import Icon from "./Icon.astro";
+import Logo from "./Logo.astro";
+import { nav, site } from "../site";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const current = (href: string) => (currentPath === href ? "page" : undefined);
+// Contact is a button on wide screens and a plain link in the phone menu.
+const desktopLinks = nav.filter((item) => item.href !== "/contact");
+---
+
+<header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+  <Container class="flex h-16 items-center justify-between gap-6">
+    <a
+      href="/"
+      class="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-600"
+      aria-label={`${site.name} home`}
+    >
+      <Logo />
+    </a>
+
+    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+      {
+        desktopLinks.map((item) => (
+          <a
+            href={item.href}
+            aria-current={current(item.href)}
+            class:list={[
+              "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-slate-900",
+              current(item.href) ? "text-slate-900" : "text-slate-600",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/contact" aria-current={current("/contact")} class="btn-primary ml-3 px-4 py-2 text-sm">
+        Get in touch
+      </a>
+    </nav>
+
+    <details class="group relative md:hidden">
+      <summary
+        class="flex size-10 cursor-pointer list-none items-center justify-center rounded-md text-slate-700 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-brand-600 [&::-webkit-details-marker]:hidden"
+        aria-label="Menu"
+      >
+        <Icon name="menu" class="size-6 group-open:hidden" />
+        <Icon name="close" class="hidden size-6 group-open:block" />
+      </summary>
+      <nav
+        aria-label="Main"
+        class="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-white p-2 shadow-lg"
+      >
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={current(item.href)}
+              class:list={[
+                "block rounded-lg px-3 py-2.5 text-base font-medium hover:bg-slate-50",
+                current(item.href) ? "text-brand-700" : "text-slate-700",
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </details>
+  </Container>
+</header>

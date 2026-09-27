@@ -1,0 +1,47 @@
+---
+import { site } from "../site";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// "Five Chip LLC" renders as bold "Five Chip" + lighter "LLC".
+const words = site.name.split(" ");
+const lastWord = words.length > 1 ? words.pop() : undefined;
+const lead = words.join(" ");
+---
+
+<span class:list={["inline-flex items-center gap-2.5", className]}>
+  <!-- Same mark as public/favicon.svg: a chip with five pips. -->
+  <svg class="size-8 shrink-0" viewBox="0 0 32 32" aria-hidden="true">
+    <g class="fill-brand-600">
+      <rect x="10" y="1" width="2" height="5" rx="1"></rect>
+      <rect x="15" y="1" width="2" height="5" rx="1"></rect>
+      <rect x="20" y="1" width="2" height="5" rx="1"></rect>
+      <rect x="10" y="26" width="2" height="5" rx="1"></rect>
+      <rect x="15" y="26" width="2" height="5" rx="1"></rect>
+      <rect x="20" y="26" width="2" height="5" rx="1"></rect>
+      <rect x="1" y="10" width="5" height="2" rx="1"></rect>
+      <rect x="1" y="15" width="5" height="2" rx="1"></rect>
+      <rect x="1" y="20" width="5" height="2" rx="1"></rect>
+      <rect x="26" y="10" width="5" height="2" rx="1"></rect>
+      <rect x="26" y="15" width="5" height="2" rx="1"></rect>
+      <rect x="26" y="20" width="5" height="2" rx="1"></rect>
+      <rect x="5" y="5" width="22" height="22" rx="5"></rect>
+    </g>
+    <g class="fill-white">
+      <circle cx="11" cy="11" r="2"></circle>
+      <circle cx="21" cy="11" r="2"></circle>
+      <circle cx="16" cy="16" r="2"></circle>
+      <circle cx="11" cy="21" r="2"></circle>
+      <circle cx="21" cy="21" r="2"></circle>
+    </g>
+  </svg>
+  <!-- gap, not a space: Astro drops the whitespace between the two spans. -->
+  <span class="inline-flex items-baseline gap-[0.3em] text-[1.05rem] leading-none tracking-tight whitespace-nowrap">
+    <span class="font-semibold text-slate-900">{lead}</span>
+    {lastWord && <span class="font-normal text-slate-500">{lastWord}</span>}
+  </span>
+</span>

@@ -1,0 +1,179 @@
+---
+import CallToAction from "../components/CallToAction.astro";
+import Container from "../components/Container.astro";
+import Icon from "../components/Icon.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { services } from "../site";
+
+const questions = [
+  "Who experiences these problems? Can I see them firsthand and talk to the people who use these systems every day?",
+  "How will we know the problem is solved? Are there other issues that users have simply come to accept as normal?",
+  "What's the simplest change we can make to deliver meaningful improvement and build momentum for the project?",
+];
+
+// Six Sigma's DMAIC cycle, applied to software.
+const steps = [
+  { letter: "D", title: "Define", text: "Align on the problem, the desired outcome, and how we will know it’s fixed." },
+  { letter: "M", title: "Measure", text: "Establish a baseline of how the system works today and understand why it was designed that way." },
+  { letter: "A", title: "Analyze", text: "Challenge problem assumptions, and validate them with evidence." },
+  { letter: "I", title: "Improve", text: "Build incrementally, measure the results, and validate improvements with real users." },
+  { letter: "C", title: "Control", text: "Treat security, observability and logging as first-class requirements." },
+];
+
+const tools = [
+  "Java & Spring Boot",
+  "React & TypeScript",
+  "Apache Kafka",
+  "Google Cloud",
+  "Docker & Kubernetes",
+  "PostgreSQL",
+  "GitHub Actions",
+  "Claude",
+];
+---
+
+<BaseLayout>
+  <section class="relative isolate overflow-hidden">
+    <div aria-hidden="true" class="hero-grid absolute inset-0 -z-10"></div>
+    <Container class="pt-16 pb-20 sm:pt-24 sm:pb-24">
+      <div class="mx-auto max-w-3xl text-center">
+        <h1 class="text-4xl font-semibold tracking-tight sm:text-6xl">
+          AI can accelerate projects to an impressive degree.
+        </h1>
+        <br/>
+        <h2 class="text-4xl font-semibold tracking-tight sm:text-6xl">
+           <span class="text-brand-600">But how do you know it's building the right thing?</span>
+        </h2>
+        <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a href="/contact" class="btn-primary w-full sm:w-auto">
+            Start with the problem
+            <Icon name="arrow-right" class="size-5" />
+          </a>
+          <a href="#approach" class="btn-secondary w-full sm:w-auto">See how I work</a>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-slate-200 py-20 sm:py-24" aria-labelledby="why-heading">
+    <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
+        <p class="eyebrow">Why problem first</p>
+        <h2 id="why-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          Most software projects don't fail because of the technology.
+        </h2>
+        <p class="mt-6 text-lg leading-8 text-slate-600">
+          They fail because the problem was poorly defined, teams disagree on priorities, or competing executive metrics undermine the project's objectives. I'm sure you've seen other examples where poor coordination or timing, rather than architectural decisions, contributed to failure.
+        </p>
+        <p class="mt-6 text-lg leading-8 text-slate-600">
+            I enjoy identifying and solving these problems because they directly affect business outcomes and project success.
+            I take a pragmatic approach to working through them, knowing that progress is rarely a straight line.
+        </p>
+<p class="mt-6 text-lg leading-8 text-slate-600">
+    AI accelerates development—there's no doubt about that. But companies are already discovering that, in some cases, moving faster can create more confusion, not less.
+</p>
+
+<p class="mt-6 text-lg leading-8 text-slate-600">
+    That's why I start with the people and teams involved, taking the time to understand their needs, challenges, and priorities before turning to technology.
+</p>
+
+<p class="mt-6 text-lg leading-8 text-slate-600">
+    Once those needs are clearly understood and the problem is correctly defined, the pace can change dramatically. What starts slow can become extremely fast—because we're building toward a clearly understood business need, with a way to verify that we're actually solving it.
+</p>
+      </div>
+      <div class="self-center rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8 lg:col-span-2">
+        <h3 class="text-lg font-semibold">Questions I ask before writing code</h3>
+        <ul class="mt-5 space-y-4">
+          {
+            questions.map((question) => (
+              <li class="flex gap-3">
+                <Icon name="check" class="mt-1 size-5 shrink-0 text-brand-600" />
+                <span class="leading-7 text-slate-700">{question}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-slate-200 bg-slate-50 py-20 sm:py-24" aria-labelledby="services-heading">
+    <Container>
+      <div class="max-w-2xl">
+        <p class="eyebrow">What I do</p>
+        <h2 id="services-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          From the real problem to working software.
+        </h2>
+        <p class="mt-4 text-lg leading-8 text-slate-600">
+          I architect solutions and build them, and I keep the project moving when it stalls.
+        </p>
+      </div>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {
+          services.map((service) => (
+            <a
+              href={`/services#${service.id}`}
+              class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:p-8"
+            >
+              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                <Icon name={service.icon} />
+              </span>
+              <h3 class="mt-5 text-lg font-semibold">{service.title}</h3>
+              <p class="mt-2 leading-7 text-slate-600">{service.summary}</p>
+              <span class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700">
+                Learn more
+                <Icon name="arrow-right" class="size-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section id="approach" class="scroll-mt-16 py-20 sm:py-24" aria-labelledby="approach-heading">
+    <Container>
+      <div class="max-w-2xl">
+        <p class="eyebrow">How I work</p>
+        <h2 id="approach-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+          A Six Sigma approach to software.
+        </h2>
+        <p class="mt-4 text-lg leading-8 text-slate-600">
+          DMAIC, from my years in semiconductor manufacturing, keeps every project pointed at the real problem.
+        </p>
+      </div>
+      <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
+        {
+          steps.map((step) => (
+            <li class="border-t-2 border-brand-600 pt-6">
+              <span class="text-3xl font-semibold text-brand-600" aria-hidden="true">
+                {step.letter}
+              </span>
+              <h3 class="mt-2 text-lg font-semibold">{step.title}</h3>
+              <p class="mt-2 leading-7 text-slate-600">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </Container>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-14" aria-labelledby="tools-heading">
+    <Container class="text-center">
+      <h2 id="tools-heading" class="text-sm font-semibold tracking-wider text-slate-500 uppercase">
+        Tools I build with
+      </h2>
+      <ul class="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-2">
+        {
+          tools.map((tool) => (
+            <li class="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-700">
+              {tool}
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <CallToAction />
+</BaseLayout>

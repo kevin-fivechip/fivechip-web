@@ -1,0 +1,55 @@
+---
+import Container from "../components/Container.astro";
+import Icon from "../components/Icon.astro";
+import PageHeader from "../components/PageHeader.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { contactHref, site } from "../site";
+
+const helpful = [
+  "What's going wrong, and who it affects",
+  "What it costs today",
+  "Your timeline",
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Get in touch with ${site.name} about a software problem, a new project, or one that's stalled.`}
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Tell me about the problem."
+    intro="Not just the solution you have in mind. A few sentences is plenty."
+  />
+
+  <section class="py-16 sm:py-20">
+    <Container>
+      <div class="grid gap-6 lg:grid-cols-5">
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:col-span-3">
+          <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+            <Icon name="mail" />
+          </span>
+          <h2 class="mt-5 text-2xl font-semibold tracking-tight">Email</h2>
+          <p class="mt-2 leading-7 text-slate-600">Messages go straight to my inbox.</p>
+          <a href={contactHref} class="btn-primary mt-6 max-w-full">
+            <Icon name="mail" class="size-5 shrink-0" />
+            <span class="truncate">{site.email}</span>
+          </a>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8 lg:col-span-2">
+          <h2 class="text-lg font-semibold">Helpful to include</h2>
+          <ul class="mt-4 space-y-3">
+            {
+              helpful.map((item) => (
+                <li class="flex gap-3">
+                  <Icon name="check" class="mt-1 size-5 shrink-0 text-brand-600" />
+                  <span class="leading-7">{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
