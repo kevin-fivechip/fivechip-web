@@ -1,0 +1,23 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+firebase-debug.log*
+
+# Firebase CLI deploy cache
+.firebase/
+
+# environment variables (never commit secrets)
+.env
+.env.*
+
+# editor and OS files
+.DS_Store
+.idea/
+.vscode/

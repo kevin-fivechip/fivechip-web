@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/*
+ * Brand tokens. Change the brand palette here and every page follows.
+ * Values match Tailwind's indigo scale.
+ */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: oklch(96.2% 0.018 272.314);
+  --color-brand-100: oklch(93% 0.034 272.788);
+  --color-brand-200: oklch(87% 0.065 274.039);
+  --color-brand-300: oklch(78.5% 0.115 274.713);
+  --color-brand-500: oklch(58.5% 0.233 277.117);
+  --color-brand-600: oklch(51.1% 0.262 276.966);
+  --color-brand-700: oklch(45.7% 0.24 277.023);
+  --color-brand-900: oklch(35.9% 0.144 278.697);
+  --color-brand-950: oklch(25.7% 0.09 281.288);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-slate-700 antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply text-balance text-slate-900;
+  }
+
+  /* Avoids one-word last lines in paragraphs. */
+  p {
+    @apply text-pretty;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-950;
+  }
+}
+
+/* Shared building blocks. Utility classes added next to these win, e.g. "btn-primary px-4 text-sm". */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-800 shadow-sm transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold tracking-wider text-brand-700 uppercase;
+  }
+}
+
+/* Faint grid behind the home page hero, fading out toward the edges. */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, var(--color-slate-200) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-slate-200) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+}
+
+/* Long-form text (Privacy page). */
+.content h2 {
+  @apply mt-10 text-xl font-semibold text-slate-900;
+}
+
+.content p,
+.content ul {
+  @apply mt-4 leading-7;
+}
+
+.content ul {
+  @apply list-disc space-y-2 pl-5;
+}
+
+.content a {
+  @apply font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 hover:decoration-brand-600;
+}
