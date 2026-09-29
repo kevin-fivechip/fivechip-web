@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+import portrait from "../assets/kevin-beatty.jpg";
+import { site } from "../site";
+
+interface Props {
+  class?: string;
+  /** "portrait" is the full 4:5 photo; "round" is a small circular crop for bylines. */
+  shape?: "portrait" | "round";
+  /** Rendered width hints for srcset selection (portrait only). */
+  sizes?: string;
+  /** "eager" above the fold, "lazy" elsewhere. */
+  loading?: "eager" | "lazy";
+}
+
+const {
+  class: className,
+  shape = "portrait",
+  sizes = "(min-width: 640px) 18rem, calc(100vw - 2rem)",
+  loading = "lazy",
+} = Astro.props;
+const fetchpriority = loading === "eager" ? "high" : undefined;
+---
+
+{
+  shape === "round" ? (
+    <Image
+      src={portrait}
+      alt={site.owner}
+      width={160}
+      height={160}
+      fit="cover"
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+      class:list={["rounded-full border border-stone-200 object-cover", className]}
+    />
+  ) : (
+    <Image
+      src={portrait}
+      alt={site.owner}
+      widths={[480, 768, 1200]}
+      sizes={sizes}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+      class:list={["w-full rounded-lg border border-stone-200 object-cover shadow-sm", className]}
+    />
+  )
+}
