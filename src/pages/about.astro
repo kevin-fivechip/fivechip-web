@@ -3,6 +3,7 @@ import CallToAction from "../components/CallToAction.astro";
 import Container from "../components/Container.astro";
 import Icon from "../components/Icon.astro";
 import PageHeader from "../components/PageHeader.astro";
+import Portrait from "../components/Portrait.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../site";
 
@@ -66,32 +67,37 @@ const values = [
   <PageHeader
     eyebrow="About"
     title="A manufacturing engineer's discipline, applied to software."
-    intro={`I'm ${site.owner}. ${site.name} is my independent practice: I find the real problem, then architect and build the solution.`}
-  />
+    intro={`I'm ${site.owner}. ${site.name} is my independent practice: I find the real problem, then architect and build the solution, working alongside your teams rather than at a distance.`}
+  >
+    <Portrait slot="aside" />
+  </PageHeader>
 
   <section class="py-16 sm:py-20" aria-labelledby="career-heading">
-    <Container>
-      <div class="max-w-2xl">
+    <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-2">
         <p class="eyebrow">My path</p>
-        <h2 id="career-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-          From the cleanroom to the cloud.
-        </h2>
-        <p class="mt-4 text-lg leading-8 text-slate-600">
+        <h2 id="career-heading" class="mt-4 text-3xl sm:text-4xl">From the cleanroom to the cloud.</h2>
+        <p class="mt-4 text-lg leading-8 text-stone-600">
           In a semiconductor fab, a wrong assumption can scrap a batch of wafers. I've carried that discipline
           through more than thirty years of engineering.
         </p>
+        <p class="mt-4 text-lg leading-8 text-stone-600">
+          It's also why I work in person whenever I can, and why I pay attention to every roadblock on a
+          project, not just the technical ones. Budget, politics and timing sink more projects than
+          architecture does, and they're easier to see from inside the room.
+        </p>
       </div>
-      <ol class="mt-12 space-y-10 border-l-2 border-slate-200 pl-6 sm:pl-8">
+      <ol class="space-y-10 border-l border-stone-200 pl-6 sm:pl-8 lg:col-span-3">
         {
           career.map((era) => (
             <li class="relative">
               <span
                 aria-hidden="true"
-                class="absolute top-1.5 -left-[33px] size-4 rounded-full border-2 border-white bg-brand-600 ring-2 ring-brand-100 sm:-left-[41px]"
+                class="absolute top-2 -left-[29px] size-3 rounded-full border-2 border-white bg-accent-500 sm:-left-[37px]"
               />
-              <p class="text-sm font-semibold text-brand-700">{era.years}</p>
-              <h3 class="mt-1 text-xl font-semibold">{era.title}</h3>
-              <p class="mt-2 max-w-3xl leading-7 text-slate-600">{era.text}</p>
+              <p class="text-sm font-semibold tracking-wide text-accent-700">{era.years}</p>
+              <h3 class="mt-1 font-serif text-2xl font-semibold tracking-tight">{era.title}</h3>
+              <p class="mt-2 leading-7 text-stone-600">{era.text}</p>
             </li>
           ))
         }
@@ -99,20 +105,18 @@ const values = [
     </Container>
   </section>
 
-  <section class="border-y border-slate-200 bg-slate-50 py-16 sm:py-20" aria-labelledby="credentials-heading">
+  <section class="border-y border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="credentials-heading">
     <Container>
       <div class="max-w-2xl">
         <p class="eyebrow">Education and credentials</p>
-        <h2 id="credentials-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Trained as an engineer, first.
-        </h2>
+        <h2 id="credentials-heading" class="mt-4 text-3xl sm:text-4xl">Trained as an engineer, first.</h2>
       </div>
-      <ul class="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2">
+      <ul class="mt-10 grid gap-x-12 sm:grid-cols-2">
         {
           credentials.map((credential) => (
-            <li class="flex gap-3">
-              <Icon name="check" class="mt-1 size-5 shrink-0 text-brand-600" />
-              <span class="leading-7 text-slate-700">{credential}</span>
+            <li class="flex gap-3 border-t border-stone-200 py-4">
+              <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+              <span class="leading-7 text-stone-700">{credential}</span>
             </li>
           ))
         }
@@ -124,21 +128,14 @@ const values = [
     <Container>
       <div class="max-w-2xl">
         <p class="eyebrow">What you can expect</p>
-        <h2 id="values-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-          How every engagement runs.
-        </h2>
+        <h2 id="values-heading" class="mt-4 text-3xl sm:text-4xl">How every engagement runs.</h2>
       </div>
-      <ul class="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+      <ul class="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
         {
           values.map((value) => (
-            <li class="flex gap-4">
-              <span class="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
-                <Icon name="check" class="size-5" />
-              </span>
-              <div>
-                <h3 class="text-lg font-semibold">{value.title}</h3>
-                <p class="mt-1 leading-7 text-slate-600">{value.text}</p>
-              </div>
+            <li class="border-t-2 border-accent-500 pt-5">
+              <h3 class="text-lg font-semibold">{value.title}</h3>
+              <p class="mt-2 leading-7 text-stone-600">{value.text}</p>
             </li>
           ))
         }

@@ -1,21 +1,39 @@
 @import "tailwindcss";
 
 /*
- * Brand tokens. Change the brand palette here and every page follows.
- * Values match Tailwind's indigo scale.
+ * Brand tokens. Change the palette here and every page follows.
+ *  - brand:  deep navy, used for headings, buttons and the dark band.
+ *  - accent: warm copper, used sparingly for eyebrows, rules and marks.
+ *  - paper:  warm off-white for alternating sections.
  */
 @theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
 
-  --color-brand-50: oklch(96.2% 0.018 272.314);
-  --color-brand-100: oklch(93% 0.034 272.788);
-  --color-brand-200: oklch(87% 0.065 274.039);
-  --color-brand-300: oklch(78.5% 0.115 274.713);
-  --color-brand-500: oklch(58.5% 0.233 277.117);
-  --color-brand-600: oklch(51.1% 0.262 276.966);
-  --color-brand-700: oklch(45.7% 0.24 277.023);
-  --color-brand-900: oklch(35.9% 0.144 278.697);
-  --color-brand-950: oklch(25.7% 0.09 281.288);
+  --color-brand-50: #f3f6fa;
+  --color-brand-100: #e4eaf2;
+  --color-brand-200: #c7d3e3;
+  --color-brand-300: #9fb2cb;
+  --color-brand-400: #6b86a8;
+  --color-brand-500: #47638a;
+  --color-brand-600: #2f4a70;
+  --color-brand-700: #243b5b;
+  --color-brand-800: #1a2d47;
+  --color-brand-900: #132238;
+  --color-brand-950: #0b1526;
+
+  --color-accent-50: #fbf5f0;
+  --color-accent-100: #f6e7dc;
+  --color-accent-200: #ecccb6;
+  --color-accent-300: #dda884;
+  --color-accent-400: #cc8452;
+  --color-accent-500: #b8622a;
+  --color-accent-600: #a1521f;
+  --color-accent-700: #8f4a1d;
+  --color-accent-800: #6f3a18;
+  --color-accent-900: #4d2811;
+
+  --color-paper: #faf8f4;
 }
 
 @layer base {
@@ -24,13 +42,19 @@
   }
 
   body {
-    @apply bg-white font-sans text-slate-700 antialiased;
+    @apply bg-white font-sans text-stone-700 antialiased;
   }
 
   h1,
   h2,
   h3 {
-    @apply text-balance text-slate-900;
+    @apply text-balance text-brand-950;
+  }
+
+  /* Display headings are serif; h3 and smaller stay in Inter. */
+  h1,
+  h2 {
+    @apply font-serif font-semibold tracking-tight;
   }
 
   /* Avoids one-word last lines in paragraphs. */
@@ -39,37 +63,34 @@
   }
 
   ::selection {
-    @apply bg-brand-100 text-brand-950;
+    @apply bg-accent-100 text-brand-950;
   }
 }
 
 /* Shared building blocks. Utility classes added next to these win, e.g. "btn-primary px-4 text-sm". */
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-brand-900 px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-800 shadow-sm transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-brand-900/25 bg-white px-5 py-3 text-base font-semibold text-brand-950 transition-colors hover:border-brand-900/50 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500;
   }
 
+  /* White button for the navy call-to-action band. */
+  .btn-inverse {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-base font-semibold text-brand-950 transition-colors hover:bg-accent-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+
+  /* Section label: short copper rule, then small caps. */
   .eyebrow {
-    @apply text-sm font-semibold tracking-wider text-brand-700 uppercase;
+    @apply flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-accent-700 uppercase before:h-px before:w-8 before:shrink-0 before:bg-accent-500 before:content-[''];
   }
-}
-
-/* Faint grid behind the home page hero, fading out toward the edges. */
-.hero-grid {
-  background-image:
-    linear-gradient(to right, var(--color-slate-200) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-slate-200) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
 }
 
 /* Long-form text (Privacy page). */
 .content h2 {
-  @apply mt-10 text-xl font-semibold text-slate-900;
+  @apply mt-10 text-2xl;
 }
 
 .content p,
@@ -82,5 +103,5 @@
 }
 
 .content a {
-  @apply font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 hover:decoration-brand-600;
+  @apply font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600;
 }

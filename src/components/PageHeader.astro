@@ -8,15 +8,17 @@ interface Props {
 }
 
 const { eyebrow, title, intro } = Astro.props;
+// An optional "aside" slot (e.g. a portrait) sits to the right on wide screens.
+const hasAside = Astro.slots.has("aside");
 ---
 
-<section class="relative isolate overflow-hidden border-b border-slate-200 bg-slate-50">
-  <div aria-hidden="true" class="hero-grid absolute inset-0 -z-10 opacity-80"></div>
-  <Container class="py-16 sm:py-20">
+<section class="border-b border-stone-200 bg-paper">
+  <Container class:list={["py-16 sm:py-20", hasAside && "grid items-center gap-12 lg:grid-cols-[1fr_18rem] lg:gap-20"]}>
     <div class="max-w-3xl">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
-      {intro && <p class="mt-6 text-lg leading-8 text-slate-600">{intro}</p>}
+      <h1 class="mt-4 text-4xl sm:text-5xl">{title}</h1>
+      {intro && <p class="mt-6 text-lg leading-8 text-stone-600">{intro}</p>}
     </div>
+    {hasAside && <div class="mx-auto w-full max-w-[18rem] lg:max-w-none"><slot name="aside" /></div>}
   </Container>
 </section>

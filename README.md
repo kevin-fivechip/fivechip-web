@@ -27,6 +27,7 @@ Merging to `main` deploys automatically through `.github/workflows/deploy-site.y
 
 ## Editing content
 
-- **Business name, email, navigation and the services list:** `src/site.ts`
+- **Business name, email, LinkedIn, navigation and the services list:** `src/site.ts`
 - **Page text:** `src/pages/*.astro`
-- **Colors, font and shared button styles:** `src/styles/global.css`
+- **Colors, fonts and shared button styles:** `src/styles/global.css`
+- **Portrait:** `src/assets/kevin-beatty.jpg` (keep the 4:5 ratio)

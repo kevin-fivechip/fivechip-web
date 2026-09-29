@@ -2,8 +2,9 @@
 import CallToAction from "../components/CallToAction.astro";
 import Container from "../components/Container.astro";
 import Icon from "../components/Icon.astro";
+import Portrait from "../components/Portrait.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { services } from "../site";
+import { services, site } from "../site";
 
 const questions = [
   "Who experiences these problems? Can I see them firsthand and talk to the people who use these systems every day?",
@@ -13,114 +14,117 @@ const questions = [
 
 // Six Sigma's DMAIC cycle, applied to software.
 const steps = [
-  { letter: "D", title: "Define", text: "Align on the problem, the desired outcome, and how we will know it’s fixed." },
+  { letter: "D", title: "Define", text: "Align on the problem, the desired outcome, and how we will know it's fixed." },
   { letter: "M", title: "Measure", text: "Establish a baseline of how the system works today and understand why it was designed that way." },
-  { letter: "A", title: "Analyze", text: "Challenge problem assumptions, and validate them with evidence." },
+  { letter: "A", title: "Analyze", text: "Challenge assumptions about the problem, and validate them with evidence." },
   { letter: "I", title: "Improve", text: "Build incrementally, measure the results, and validate improvements with real users." },
   { letter: "C", title: "Control", text: "Treat security, observability and logging as first-class requirements." },
-];
-
-const tools = [
-  "Java & Spring Boot",
-  "React & TypeScript",
-  "Apache Kafka",
-  "Google Cloud",
-  "Docker & Kubernetes",
-  "PostgreSQL",
-  "GitHub Actions",
-  "Claude",
 ];
 ---
 
 <BaseLayout>
-  <section class="relative isolate overflow-hidden">
-    <div aria-hidden="true" class="hero-grid absolute inset-0 -z-10"></div>
-    <Container class="pt-16 pb-20 sm:pt-24 sm:pb-24">
-      <div class="mx-auto max-w-3xl text-center">
-        <h1 class="text-4xl font-semibold tracking-tight sm:text-6xl">
-          AI can accelerate projects to an impressive degree.
+  <section class="border-b border-stone-200" aria-labelledby="hero-heading">
+    <Container class="relative py-16 sm:py-20 lg:py-24">
+      <div class="max-w-3xl">
+        <div class="flex items-center justify-between gap-6">
+          <p class="eyebrow">{site.tagline}</p>
+          <!-- Byline: in the eyebrow row on small screens, top-right corner of the section on large ones. -->
+          <a
+            href="/about"
+            class="group inline-flex shrink-0 items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-500 lg:absolute lg:top-24 lg:right-8"
+          >
+            <span class="hidden text-right text-sm leading-5 sm:block">
+              <span class="block font-semibold text-brand-950 group-hover:text-accent-700">{site.owner}</span>
+              <span class="block text-stone-600">Principal engineer and founder</span>
+            </span>
+            <Portrait shape="round" loading="eager" class="size-11 lg:size-14" />
+          </a>
+        </div>
+        <h1 id="hero-heading" class="mt-5 text-4xl leading-[1.1] sm:text-5xl lg:text-6xl">
+          Understand the problem before building the solution.
         </h1>
-        <br/>
-        <h2 class="text-4xl font-semibold tracking-tight sm:text-6xl">
-           <span class="text-brand-600">But how do you know it's building the right thing?</span>
-        </h2>
-        <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a href="/contact" class="btn-primary w-full sm:w-auto">
-            Start with the problem
+        <p class="mt-6 max-w-2xl text-lg leading-8 text-stone-600">
+          {site.name} is the independent practice of {site.owner}: thirty years of engineering, from
+          semiconductor process control to event-driven platforms, done in person with the people who do the
+          work. AI has made building software fast. Knowing you're building the right thing is still the hard
+          part.
+        </p>
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a href="/contact" class="btn-primary">
+            Tell me about the problem
             <Icon name="arrow-right" class="size-5" />
           </a>
-          <a href="#approach" class="btn-secondary w-full sm:w-auto">See how I work</a>
+          <a href="#approach" class="btn-secondary">How I work</a>
         </div>
       </div>
     </Container>
   </section>
 
-  <section class="border-t border-slate-200 py-20 sm:py-24" aria-labelledby="why-heading">
+  <section id="problem" class="bg-paper py-20 sm:py-24" aria-labelledby="why-heading">
     <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
       <div class="lg:col-span-3">
         <p class="eyebrow">Why problem first</p>
-        <h2 id="why-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 id="why-heading" class="mt-4 text-3xl sm:text-4xl">
           Most software projects don't fail because of the technology.
         </h2>
-        <p class="mt-6 text-lg leading-8 text-slate-600">
-          They fail because the problem was poorly defined, teams disagree on priorities, or competing executive metrics undermine the project's objectives. I'm sure you've seen other examples where poor coordination or timing, rather than architectural decisions, contributed to failure.
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          They fail because the problem was poorly defined, teams disagree on priorities, or competing metrics
+          pull the project in different directions. AI accelerates development, and companies are finding that
+          moving faster can also mean getting confused faster. So I start with the people involved and take the
+          time to understand their needs, challenges and priorities before turning to technology.
         </p>
-        <p class="mt-6 text-lg leading-8 text-slate-600">
-            I enjoy identifying and solving these problems because they directly affect business outcomes and project success.
-            I take a pragmatic approach to working through them, knowing that progress is rarely a straight line.
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          I do that in person wherever I can. I meet teams where the work happens and watch the system being
+          used, because the people on the ground usually know things that never make it into a proposal or a
+          statement of work. The best answers are often already in the room. Once the problem is correctly
+          defined, the pace changes: what starts slow becomes very fast, because we're building toward a
+          clearly understood need with a way to verify we've met it.
         </p>
-<p class="mt-6 text-lg leading-8 text-slate-600">
-    AI accelerates development—there's no doubt about that. But companies are already discovering that, in some cases, moving faster can create more confusion, not less.
-</p>
-
-<p class="mt-6 text-lg leading-8 text-slate-600">
-    That's why I start with the people and teams involved, taking the time to understand their needs, challenges, and priorities before turning to technology.
-</p>
-
-<p class="mt-6 text-lg leading-8 text-slate-600">
-    Once those needs are clearly understood and the problem is correctly defined, the pace can change dramatically. What starts slow can become extremely fast—because we're building toward a clearly understood business need, with a way to verify that we're actually solving it.
-</p>
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          I learned this in semiconductor manufacturing, where a wrong assumption scraps wafers you can hold in
+          your hand. Changes there were measured, scrutinized and proven before they were deployed. I build
+          software the same way.
+        </p>
       </div>
-      <div class="self-center rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8 lg:col-span-2">
+      <aside class="self-start rounded-lg border border-stone-200 bg-white p-6 sm:p-8 lg:col-span-2">
         <h3 class="text-lg font-semibold">Questions I ask before writing code</h3>
-        <ul class="mt-5 space-y-4">
+        <ul class="mt-5 divide-y divide-stone-200">
           {
             questions.map((question) => (
-              <li class="flex gap-3">
-                <Icon name="check" class="mt-1 size-5 shrink-0 text-brand-600" />
-                <span class="leading-7 text-slate-700">{question}</span>
+              <li class="flex gap-3 py-4 first:pt-0 last:pb-0">
+                <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                <span class="leading-7 text-stone-700">{question}</span>
               </li>
             ))
           }
         </ul>
-      </div>
+      </aside>
     </Container>
   </section>
 
-  <section class="border-t border-slate-200 bg-slate-50 py-20 sm:py-24" aria-labelledby="services-heading">
+  <section id="solution" class="border-t border-stone-200 py-20 sm:py-24" aria-labelledby="services-heading">
     <Container>
       <div class="max-w-2xl">
         <p class="eyebrow">What I do</p>
-        <h2 id="services-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-          From the real problem to working software.
-        </h2>
-        <p class="mt-4 text-lg leading-8 text-slate-600">
-          I architect solutions and build them, and I keep the project moving when it stalls.
+        <h2 id="services-heading" class="mt-4 text-3xl sm:text-4xl">From the real problem to working software.</h2>
+        <p class="mt-4 text-lg leading-8 text-stone-600">
+          I architect solutions and build them, and I keep the project moving when it stalls, whatever is in the
+          way.
         </p>
       </div>
       <div class="mt-12 grid gap-6 sm:grid-cols-2">
         {
-          services.map((service) => (
+          services.map((service, index) => (
             <a
               href={`/services#${service.id}`}
-              class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:p-8"
+              class="group flex flex-col rounded-lg border border-stone-200 bg-white p-6 transition-colors hover:border-brand-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 sm:p-8"
             >
-              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
-                <Icon name={service.icon} />
+              <span class="font-serif text-sm font-semibold tracking-[0.18em] text-accent-700">
+                {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 class="mt-5 text-lg font-semibold">{service.title}</h3>
-              <p class="mt-2 leading-7 text-slate-600">{service.summary}</p>
-              <span class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700">
+              <h3 class="mt-4 text-xl font-semibold">{service.title}</h3>
+              <p class="mt-3 flex-1 leading-7 text-stone-600">{service.summary}</p>
+              <span class="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-brand-950">
                 Learn more
                 <Icon name="arrow-right" class="size-4 transition-transform group-hover:translate-x-0.5" />
               </span>
@@ -131,47 +135,29 @@ const tools = [
     </Container>
   </section>
 
-  <section id="approach" class="scroll-mt-16 py-20 sm:py-24" aria-labelledby="approach-heading">
+  <section id="approach" class="scroll-mt-16 border-t border-stone-200 bg-paper py-20 sm:py-24" aria-labelledby="approach-heading">
     <Container>
       <div class="max-w-2xl">
         <p class="eyebrow">How I work</p>
-        <h2 id="approach-heading" class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-          A Six Sigma approach to software.
-        </h2>
-        <p class="mt-4 text-lg leading-8 text-slate-600">
-          DMAIC, from my years in semiconductor manufacturing, keeps every project pointed at the real problem.
+        <h2 id="approach-heading" class="mt-4 text-3xl sm:text-4xl">A Six Sigma approach to software.</h2>
+        <p class="mt-4 text-lg leading-8 text-stone-600">
+          DMAIC comes from my Six Sigma training in semiconductor manufacturing. It keeps every project pointed
+          at the real problem and proves the fix before it ships.
         </p>
       </div>
       <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
         {
           steps.map((step) => (
-            <li class="border-t-2 border-brand-600 pt-6">
-              <span class="text-3xl font-semibold text-brand-600" aria-hidden="true">
+            <li class="border-t-2 border-accent-500 pt-6">
+              <span class="font-serif text-4xl font-semibold text-brand-950" aria-hidden="true">
                 {step.letter}
               </span>
               <h3 class="mt-2 text-lg font-semibold">{step.title}</h3>
-              <p class="mt-2 leading-7 text-slate-600">{step.text}</p>
+              <p class="mt-2 leading-7 text-stone-600">{step.text}</p>
             </li>
           ))
         }
       </ol>
-    </Container>
-  </section>
-
-  <section class="border-y border-slate-200 bg-slate-50 py-14" aria-labelledby="tools-heading">
-    <Container class="text-center">
-      <h2 id="tools-heading" class="text-sm font-semibold tracking-wider text-slate-500 uppercase">
-        Tools I build with
-      </h2>
-      <ul class="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-2">
-        {
-          tools.map((tool) => (
-            <li class="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-700">
-              {tool}
-            </li>
-          ))
-        }
-      </ul>
     </Container>
   </section>
 

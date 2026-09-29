@@ -14,11 +14,11 @@ const current = (href: string) => (currentPath === href ? "page" : undefined);
 const desktopLinks = nav.filter((item) => item.href !== "/contact");
 ---
 
-<header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+<header class="sticky top-0 z-40 border-b border-stone-200 bg-white/90 backdrop-blur-md">
   <Container class="flex h-16 items-center justify-between gap-6">
     <a
       href="/"
-      class="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-600"
+      class="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-500"
       aria-label={`${site.name} home`}
     >
       <Logo />
@@ -31,22 +31,22 @@ const desktopLinks = nav.filter((item) => item.href !== "/contact");
             href={item.href}
             aria-current={current(item.href)}
             class:list={[
-              "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-slate-900",
-              current(item.href) ? "text-slate-900" : "text-slate-600",
+              "border-b-2 px-3 py-2 text-sm font-medium transition-colors hover:text-brand-950",
+              current(item.href) ? "border-accent-500 text-brand-950" : "border-transparent text-stone-600",
             ]}
           >
             {item.label}
           </a>
         ))
       }
-      <a href="/contact" aria-current={current("/contact")} class="btn-primary ml-3 px-4 py-2 text-sm">
+      <a href="/contact" aria-current={current("/contact")} class="btn-primary ml-4 px-4 py-2 text-sm">
         Get in touch
       </a>
     </nav>
 
     <details class="group relative md:hidden">
       <summary
-        class="flex size-10 cursor-pointer list-none items-center justify-center rounded-md text-slate-700 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-brand-600 [&::-webkit-details-marker]:hidden"
+        class="flex size-10 cursor-pointer list-none items-center justify-center rounded-md text-brand-950 hover:bg-paper focus-visible:outline-2 focus-visible:outline-accent-500 [&::-webkit-details-marker]:hidden"
         aria-label="Menu"
       >
         <Icon name="menu" class="size-6 group-open:hidden" />
@@ -54,7 +54,7 @@ const desktopLinks = nav.filter((item) => item.href !== "/contact");
       </summary>
       <nav
         aria-label="Main"
-        class="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-white p-2 shadow-lg"
+        class="absolute right-0 mt-2 w-60 rounded-lg border border-stone-200 bg-white p-2 shadow-lg"
       >
         {
           nav.map((item) => (
@@ -62,8 +62,8 @@ const desktopLinks = nav.filter((item) => item.href !== "/contact");
               href={item.href}
               aria-current={current(item.href)}
               class:list={[
-                "block rounded-lg px-3 py-2.5 text-base font-medium hover:bg-slate-50",
-                current(item.href) ? "text-brand-700" : "text-slate-700",
+                "block rounded-md px-3 py-2.5 text-base font-medium hover:bg-paper",
+                current(item.href) ? "text-accent-700" : "text-brand-950",
               ]}
             >
               {item.label}
