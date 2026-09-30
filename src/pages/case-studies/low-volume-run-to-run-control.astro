@@ -1,0 +1,433 @@
+---
+import CallToAction from "../../components/CallToAction.astro";
+import Container from "../../components/Container.astro";
+import ProductGrouping from "../../components/diagrams/ProductGrouping.astro";
+import RunToRunLoop from "../../components/diagrams/RunToRunLoop.astro";
+import Icon from "../../components/Icon.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { caseStudies } from "../../case-studies";
+
+// Facts on this page come from Kevin's 2005 Six Sigma project report. No colleague
+// names, product codes, site codes or vendor names are published.
+const study = caseStudies.find((item) => item.slug === "low-volume-run-to-run-control")!;
+const legal = caseStudies.find((item) => item.slug === "local-ai-legal-discovery")!;
+
+const settingSources = [
+  { name: "Table defaults", text: "Stored in the factory database. Correct on the day they were entered, and quietly out of date after that." },
+  { name: "Engineering", text: "A photo engineer working out the correction by hand. Right, but there weren't enough engineers to do it for every lot." },
+  { name: "The run-to-run controller", text: "Automatic, and excellent for the high-volume product. For a product that ran once a week, it had nothing recent to learn from." },
+];
+
+const requirements = [
+  "A low-volume product must be able to draw feedback data from a group of related high- and low-volume products.",
+  "The high-volume product must not be affected. It keeps using only its own lots, exactly as before.",
+  "Photo engineering must be able to configure and maintain groups themselves, without a developer.",
+];
+
+const designSteps = [
+  { title: "A parameters database for grouping", text: "One row per product and stage, with two flags: share lots to the group, and use lots from the group. Edited in the control system's existing web interface." },
+  { title: "Controller logic changes", text: "The run-to-run controller reads the group, loops through its members to find who is sharing, and builds the query that retrieves the pooled lot history. It also checks for configuration errors such as a duplicate entry for the same product and stage." },
+  { title: "Tests before production", text: "Ten new tests covered grouping during measurement submissions and recommendations, groups with and without entries, and the no-lots-found case. To pass, every one of the 179 tests already in the suite had to pass too, unmodified." },
+];
+
+const controls = [
+  { title: "Alerts designed in", text: "Two new error codes for grouping configuration mistakes, wired to a distribution list owned by photo engineering." },
+  { title: "Fail safe, not stop", text: "If a group is misconfigured, the controller falls back to a standard, ungrouped recommendation so no work in progress is put on hold." },
+  { title: "Nothing else changed", text: "The existing SPC charts, out-of-control action plans and no-past-lots alerts were untouched and verified by tests, so the shift teams needed no retraining." },
+  { title: "Five minutes of training", text: "Photo engineers were shown the grouping screen and could create and change groups on their own within five minutes. Group ownership stayed with them." },
+];
+
+// Overlay-y at the top pole frosting stage, before and after grouping.
+const results = [
+  { product: "High-volume product", before: "1.15", after: "1.65", sigmaBefore: "139 nm", sigmaAfter: "132 nm", note: "Unchanged by design" },
+  { product: "Low-volume product A", before: "0.71", after: "1.17", sigmaBefore: "232 nm", sigmaAfter: "157 nm", note: "Goal met" },
+  { product: "Low-volume product B", before: "0.57", after: "1.17", sigmaBefore: "244 nm", sigmaAfter: "176 nm", note: "23 nm short of goal" },
+];
+
+---
+
+<BaseLayout
+  title={study.title}
+  description="How a Six Sigma DMAIC project at a Seagate wafer fab gave low-volume products the high-volume product's feedback data, inside a run-to-run control system still in production twenty years later."
+>
+  <PageHeader eyebrow="Case study" title={study.title} intro={study.summary}>
+    <dl slot="aside" class="grid grid-cols-2 gap-x-6 gap-y-5 text-sm lg:grid-cols-1">
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Client</dt>
+        <dd class="mt-1 text-stone-700">{study.client}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Role</dt>
+        <dd class="mt-1 text-stone-700">{study.role}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Timeline</dt>
+        <dd class="mt-1 text-stone-700">Baseline February 2005. In production June 2005. Still running.</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Stack</dt>
+        <dd class="mt-1 text-stone-700">Java, Enterprise JavaBeans, Oracle, XML over HTTP, JUnit</dd>
+      </div>
+    </dl>
+  </PageHeader>
+
+  <article>
+    <section class="py-16 sm:py-20" aria-labelledby="define-heading">
+      <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+        <div class="lg:col-span-3">
+          <p class="eyebrow">Define</p>
+          <h2 id="define-heading" class="mt-4 text-3xl sm:text-4xl">Most of the fab's products were too rare to control.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            In a wafer fab, every layer has to line up with the one beneath it. The stepper aligns a photomask to
+            marks on the wafer, and the offset it needs changes a little with every lot. Automated run-to-run
+            control learns that offset from recent lots and recommends settings for the next one. It works
+            beautifully when a product runs many lots a day.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            About 80 percent of the products at this fab ran less than one lot a day on a given tool-stage.
+            For them there was no recent history to learn from, so their overlay missed specification more
+            often, and a lot that missed was reworked until it passed. Rework ate turn time on development
+            lots, stepper and metrology capacity, and engineering hours spent working out corrections by hand.
+            It had been going on for nine months, since a new process arrived on the steppers.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The year before, I had architected the fab's Advanced Process Control system and worked with
+            engineering and IT to put it into production. This project was about making it serve the products
+            it couldn't yet see.
+          </p>
+        </div>
+        <aside class="self-start rounded-lg border border-stone-200 bg-paper p-6 sm:p-8 lg:col-span-2">
+          <h3 class="text-lg font-semibold">The project charter</h3>
+          <dl class="mt-4 divide-y divide-stone-200">
+            <div class="py-3 first:pt-0">
+              <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Objective</dt>
+              <dd class="mt-1 leading-7 text-stone-700">
+                Bring low-volume overlay variance to within 10 percent of the high-volume product at the same
+                stage, by June 2005, as measured by the overlay metrology tool.
+              </dd>
+            </div>
+            <div class="py-3">
+              <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Primary metric</dt>
+              <dd class="mt-1 leading-7 text-stone-700">Overlay variance at the top pole frosting stage.</dd>
+            </div>
+            <div class="py-3">
+              <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Secondary metrics</dt>
+              <dd class="mt-1 leading-7 text-stone-700">Rework rate for low-volume products. Tool capacity.</dd>
+            </div>
+            <div class="py-3 last:pb-0">
+              <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Business benefit</dt>
+              <dd class="mt-1 leading-7 text-stone-700">Robust photo processes and delivery to demand, both corporate objectives that year.</dd>
+            </div>
+          </dl>
+        </aside>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="discovery-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Discovery</p>
+          <h2 id="discovery-heading" class="mt-4 text-3xl sm:text-4xl">The photo engineers already knew where the settings came from.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The team was four photo engineers and me. We started with a mind map of everything that could
+            move overlay at this stage, then a system map of suppliers, inputs, process, outputs and customers,
+            with the feed-forward and feedback loops drawn in. The most useful finding came from sitting with
+            the engineers who set up lots every day: the overlay settings for a low-volume lot could come from
+            any of three places, and none of them was good enough.
+          </p>
+        </div>
+        <ol class="mt-10 grid gap-6 md:grid-cols-3">
+          {
+            settingSources.map((source, i) => (
+              <li class="rounded-lg border border-stone-200 bg-white p-6">
+                <span class="font-serif text-sm font-semibold tracking-[0.18em] text-accent-700">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 class="mt-3 text-lg font-semibold">{source.name}</h3>
+                <p class="mt-2 leading-7 text-stone-600">{source.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="mt-8 max-w-3xl text-lg leading-8 text-stone-600">
+          Two key inputs fell out of that: the overlay settings used at this stage, and the alignment marks
+          created at the earlier stripe stage. Everything after this point was about proving which one
+          mattered, and by how much.
+        </p>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="measure-heading">
+      <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+        <div class="lg:col-span-2">
+          <p class="eyebrow">Measure</p>
+          <h2 id="measure-heading" class="mt-4 text-3xl sm:text-4xl">Prove the ruler before trusting the data.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Before baselining anything, a gage study on the overlay metrology tool showed that less than four
+            percent of the process variation was measurement error. The numbers could be trusted.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Then twelve weeks of production data set the baseline. In the direction that mattered, the
+            high-volume product was capable. The two low-volume products were not: their process capability
+            index was well under one, which means a meaningful share of lots would land outside specification.
+          </p>
+        </div>
+        <div class="self-start overflow-x-auto rounded-lg border border-stone-200 lg:col-span-3">
+          <table class="w-full min-w-[28rem] text-left text-sm">
+            <caption class="sr-only">Baseline overlay-y capability, February to April 2005</caption>
+            <thead class="bg-paper text-xs tracking-[0.18em] text-stone-500 uppercase">
+              <tr>
+                <th scope="col" class="px-4 py-3 font-semibold">Product</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Lots a day</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Overlay-y Cpk</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Overlay-y sigma</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-200">
+              <tr>
+                <td class="px-4 py-3 font-semibold text-brand-950">High-volume product</td>
+                <td class="px-4 py-3 text-stone-700">Several</td>
+                <td class="px-4 py-3 text-stone-700">1.15</td>
+                <td class="px-4 py-3 text-stone-700">139 nm</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-semibold text-brand-950">Low-volume product A</td>
+                <td class="px-4 py-3 text-stone-700">Under one</td>
+                <td class="px-4 py-3 text-stone-700">0.71</td>
+                <td class="px-4 py-3 text-stone-700">232 nm</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-semibold text-brand-950">Low-volume product B</td>
+                <td class="px-4 py-3 text-stone-700">Under one</td>
+                <td class="px-4 py-3 text-stone-700">0.57</td>
+                <td class="px-4 py-3 text-stone-700">244 nm</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="border-t border-stone-200 bg-paper px-4 py-3 text-sm leading-6 text-stone-600">
+            Goal for the low-volume products: overlay-y sigma at or below 153 nm, within 10 percent of the
+            high-volume product.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="analyze-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Analyze</p>
+          <h2 id="analyze-heading" class="mt-4 text-3xl sm:text-4xl">Two causes, two owners.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Three candidate causes went under the microscope: gaps in feedback data, which of two steppers
+            patterned this stage, and which of two tools patterned the earlier stripe stage. Tracing each
+            high-volume lot's path through both tools and testing the variances showed that the stepper at
+            this stage mattered, with roughly a four-nanometre difference between the two machines, and that
+            the stripe tool barely registered.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The data gaps refused to correlate with anything, and the reason was instructive: engineers were
+            manually overriding the settings so often that the effect of missing data was hidden underneath
+            their corrections. That constant manual intervention was itself the strongest evidence that the
+            gaps mattered. So the work split cleanly. Photo engineering took the stepper-to-stepper variance.
+            I took the data.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="improve-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Improve</p>
+          <h2 id="improve-heading" class="mt-4 text-3xl sm:text-4xl">Let low-volume products borrow the high-volume product's data.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The control system already did the right thing for the high-volume product: every lot's measured
+            overlay became input for the next lot's recommendation. The low-volume products were failing only
+            because that loop had nothing recent to work with. The fix was to let related products share a
+            pool of recent lots, under rules the photo engineers set.
+          </p>
+        </div>
+        <div class="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <figure class="min-w-0">
+            <div class="overflow-x-auto">
+              <RunToRunLoop class="max-w-lg" />
+            </div>
+            <figcaption class="mt-4 text-sm leading-6 text-stone-500">
+              The run-to-run loop as it already worked for the high-volume product. Grouping changes only what
+              the recommendation step is allowed to look at.
+            </figcaption>
+          </figure>
+          <figure class="min-w-0">
+            <div class="overflow-x-auto">
+              <ProductGrouping class="max-w-lg" />
+            </div>
+            <figcaption class="mt-4 text-sm leading-6 text-stone-500">
+              The grouping design. Two flags per product and stage keep the high-volume product isolated while
+              the low-volume products draw on the whole group.
+            </figcaption>
+          </figure>
+        </div>
+        <div class="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <h3 class="text-lg font-semibold">Requirements the engineers set</h3>
+            <ul class="mt-4 divide-y divide-stone-200">
+              {
+                requirements.map((item) => (
+                  <li class="flex gap-3 py-4 first:pt-0">
+                    <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                    <span class="leading-7 text-stone-700">{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold">How it was built</h3>
+            <ol class="mt-4 divide-y divide-stone-200">
+              {
+                designSteps.map((step, i) => (
+                  <li class="flex gap-4 py-4 first:pt-0">
+                    <span class="w-6 shrink-0 font-serif text-lg font-semibold text-accent-700">{i + 1}</span>
+                    <div>
+                      <p class="font-semibold text-brand-950">{step.title}</p>
+                      <p class="mt-1 leading-7 text-stone-600">{step.text}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+        </div>
+        <p class="mt-10 max-w-3xl text-lg leading-8 text-stone-600">
+          With the tests green, the modified controller went into production for a month-long evaluation on
+          live product in June 2005, one group of three products at one stage.
+        </p>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="control-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Control</p>
+          <h2 id="control-heading" class="mt-4 text-3xl sm:text-4xl">Control designed in, not bolted on.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Because the change lived inside the control system, the control plan was mostly the system's own
+            behaviour, extended carefully rather than replaced.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
+          {
+            controls.map((item) => (
+              <li class="border-t-2 border-accent-500 pt-5">
+                <h3 class="text-lg font-semibold">{item.title}</h3>
+                <p class="mt-2 leading-7 text-stone-600">{item.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="results-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Results</p>
+          <h2 id="results-heading" class="mt-4 text-3xl sm:text-4xl">One product met the goal. One came close. The high-volume product didn't move.</h2>
+        </div>
+        <div class="mt-10 overflow-x-auto rounded-lg border border-stone-200">
+          <table class="w-full min-w-[36rem] text-left text-sm">
+            <caption class="sr-only">Overlay-y before and after grouping</caption>
+            <thead class="bg-paper text-xs tracking-[0.18em] text-stone-500 uppercase">
+              <tr>
+                <th scope="col" class="px-4 py-3 font-semibold">Product</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Cpk before</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Cpk after</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Sigma before</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Sigma after</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Against goal</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-200">
+              {
+                results.map((row) => (
+                  <tr>
+                    <td class="px-4 py-3 font-semibold text-brand-950">{row.product}</td>
+                    <td class="px-4 py-3 text-stone-700">{row.before}</td>
+                    <td class="px-4 py-3 text-stone-700">{row.after}</td>
+                    <td class="px-4 py-3 text-stone-700">{row.sigmaBefore}</td>
+                    <td class="px-4 py-3 text-stone-700">{row.sigmaAfter}</td>
+                    <td class="px-4 py-3 text-stone-700">{row.note}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <p class="text-lg leading-8 text-stone-600">
+            Product A's overlay-y sigma fell from 232 to 157 nanometres, a 75-nanometre improvement that met
+            the goal. Product B fell from 244 to 176, a 68-nanometre improvement that landed 23 nanometres
+            short. I reported it that way. The high-volume product, which the engineers had insisted must not
+            be touched, was untouched: its sigma moved from 139 to 132 nanometres, within noise, and its
+            capability held.
+          </p>
+          <p class="text-lg leading-8 text-stone-600">
+            The grouping strategy then became the standard for every run-to-run controller in wafer
+            fabrication at both of Seagate's sites that ran the system. Chemical-mechanical polishing control
+            adopted the identical parameters-database design in production the following quarter, and ion
+            mill control was designed around grouping from the start.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-brand-950 py-16 sm:py-20" aria-labelledby="legacy-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow text-accent-300 before:bg-accent-400">Twenty years later</p>
+          <h2 id="legacy-heading" class="mt-4 text-3xl text-white sm:text-4xl">Still making the drives in today's data centers.</h2>
+          <p class="mt-6 text-lg leading-8 text-brand-200">
+            The control system I architected, and the grouping design this project put inside it, are still in
+            production at Seagate two decades on, in four countries. The recording heads for the hard drives
+            in modern data centers are patterned under run-to-run control that traces back to this work. It
+            has outlived the servers it was first installed on, several generations of the tools it controls,
+            and the technology stack it was written in.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="parallel-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">The same approach, twenty years apart</p>
+          <h2 id="parallel-heading" class="mt-4 text-3xl sm:text-4xl">The technology changed completely. The method didn't.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            In 2005 the stack was Java applets, Enterprise JavaBeans and Oracle. In 2026 it was Python and a
+            local vision model. Put the two projects side by side and the shape of the work is identical,
+            because the shape comes from Six Sigma's DMAIC cycle, not from the tools.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            <a
+              href="/case-studies#comparison"
+              class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600"
+            >
+              See the two projects side by side
+              <Icon name="arrow-right" class="size-4" />
+            </a>
+            <a
+              href={`/case-studies/${legal.slug}`}
+              class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600"
+            >
+              Read the 2026 project
+              <Icon name="arrow-right" class="size-4" />
+            </a>
+          </div>
+        </div>
+      </Container>
+    </section>
+  </article>
+
+  <CallToAction />
+</BaseLayout>

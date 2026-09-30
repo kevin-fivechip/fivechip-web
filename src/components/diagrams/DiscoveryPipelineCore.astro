@@ -1,0 +1,157 @@
+---
+/**
+ * The core of the legal discovery pipeline: scanned PDF in, canonical
+ * Markdown out. Vertical layout so it stays legible on phones. Inline SVG,
+ * styled with the site's palette; no images.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const main = { x: 24, w: 252, h: 58 };
+const side = { x: 296, w: 168 };
+const gap = 22;
+
+type Aside = { title: string; lines: string[]; kind: "model" | "doc"; h?: number };
+type Step = { title: string; sub: string; input?: boolean; aside?: Aside };
+
+const steps: Step[] = [
+  { title: "Scanned PDFs", sub: "Scanned medical and case records", input: true },
+  { title: "1 · PDF to PNG", sub: "One page at a time" },
+  {
+    title: "2 · PNG to text",
+    sub: "A vision model transcribes each page",
+    aside: { kind: "model", title: "Ollama, local", lines: ["qwen2.5-VL 32B", "Temperature 0", "Transcribe, never guess"], h: 84 },
+  },
+  { title: "3 · Assemble pages", sub: "Writes the vision file", aside: { kind: "doc", title: "vision.md", lines: ["Exact page text"] } },
+  {
+    title: "4 · Derive canonical Markdown",
+    sub: "Configuration rules. No AI.",
+    aside: { kind: "doc", title: "canonical.md", lines: ["Standard shape per type"] },
+  },
+];
+
+// Lay the steps out top to bottom.
+let y = 50;
+const placed = steps.map((step) => {
+  const item = { ...step, y };
+  y += main.h + gap;
+  return item;
+});
+const height = y - gap + 20;
+const cx = main.x + main.w / 2;
+---
+
+<svg
+  viewBox={`0 0 480 ${height}`}
+  role="img"
+  aria-labelledby="core-title"
+  class:list={["h-auto w-full min-w-[28rem] font-sans", className]}
+>
+  <title id="core-title">
+    Core pipeline: scanned PDFs are split into page images, transcribed by a local vision model at temperature 0,
+    assembled into a vision Markdown file, then converted by configuration rules with no AI into a canonical
+    Markdown file.
+  </title>
+  <defs>
+    <marker id="core-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5 0 10z" class="fill-accent-500" />
+    </marker>
+  </defs>
+
+  <!-- Trust boundary -->
+  <rect x="8" y="8" width="464" height={height - 16} rx="8" class="fill-paper stroke-stone-300" stroke-dasharray="5 4" />
+  <text x="24" y="30" class="fill-stone-500" font-size="11" font-style="italic">
+    One MacBook. Nothing leaves the machine.
+  </text>
+
+  {
+    placed.map((step, i) => (
+      <>
+        {i > 0 && (
+          <line
+            x1={cx}
+            y1={step.y - gap + 2}
+            x2={cx}
+            y2={step.y - 3}
+            class="stroke-accent-500"
+            stroke-width="1.5"
+            marker-end="url(#core-arrow)"
+          />
+        )}
+        <rect
+          x={main.x}
+          y={step.y}
+          width={main.w}
+          height={main.h}
+          rx="6"
+          class:list={[step.input ? "fill-white stroke-brand-900" : "fill-white stroke-stone-300"]}
+          stroke-width="1.25"
+        />
+        <text x={main.x + 14} y={step.y + 24} class="fill-brand-950" font-size="14" font-weight="600">
+          {step.title}
+        </text>
+        <text x={main.x + 14} y={step.y + 44} class="fill-stone-600" font-size="12">
+          {step.sub}
+        </text>
+
+        {step.aside && (
+          <>
+            {step.aside.kind === "model" ? (
+              <line
+                x1={main.x + main.w + 4}
+                y1={step.y + main.h / 2}
+                x2={side.x - 4}
+                y2={step.y + main.h / 2}
+                class="stroke-accent-500"
+                stroke-width="1.5"
+                marker-start="url(#core-arrow)"
+                marker-end="url(#core-arrow)"
+              />
+            ) : (
+              <line
+                x1={main.x + main.w + 4}
+                y1={step.y + main.h / 2}
+                x2={side.x - 4}
+                y2={step.y + main.h / 2}
+                class="stroke-accent-500"
+                stroke-width="1.5"
+                marker-end="url(#core-arrow)"
+              />
+            )}
+            <rect
+              x={side.x}
+              y={step.y + main.h / 2 - (step.aside.h ?? main.h) / 2}
+              width={side.w}
+              height={step.aside.h ?? main.h}
+              rx="6"
+              class:list={[step.aside.kind === "doc" ? "fill-accent-50 stroke-accent-300" : "fill-brand-50 stroke-brand-300"]}
+              stroke-width="1.25"
+            />
+            <text
+              x={side.x + 12}
+              y={step.y + main.h / 2 - (step.aside.h ?? main.h) / 2 + 22}
+              class="fill-brand-950"
+              font-size="13"
+              font-weight="600"
+            >
+              {step.aside.title}
+            </text>
+            {step.aside.lines.map((line, j) => (
+              <text
+                x={side.x + 12}
+                y={step.y + main.h / 2 - (step.aside!.h ?? main.h) / 2 + 40 + j * 16}
+                class="fill-stone-600"
+                font-size="11"
+              >
+                {line}
+              </text>
+            ))}
+          </>
+        )}
+      </>
+    ))
+  }
+</svg>

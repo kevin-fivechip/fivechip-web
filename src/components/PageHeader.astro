@@ -3,20 +3,22 @@ import Container from "./Container.astro";
 
 interface Props {
   eyebrow?: string;
-  title: string;
+  /** Plain-text title. Pass markup (e.g. a responsive <br>) as the default slot instead. */
+  title?: string;
   intro?: string;
 }
 
 const { eyebrow, title, intro } = Astro.props;
 // An optional "aside" slot (e.g. a portrait) sits to the right on wide screens.
 const hasAside = Astro.slots.has("aside");
+const hasTitleMarkup = Astro.slots.has("default");
 ---
 
 <section class="border-b border-stone-200 bg-paper">
   <Container class:list={["py-16 sm:py-20", hasAside && "grid items-center gap-12 lg:grid-cols-[1fr_18rem] lg:gap-20"]}>
     <div class="max-w-3xl">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h1 class="mt-4 text-4xl sm:text-5xl">{title}</h1>
+      <h1 class="mt-4 text-4xl sm:text-5xl">{hasTitleMarkup ? <slot /> : title}</h1>
       {intro && <p class="mt-6 text-lg leading-8 text-stone-600">{intro}</p>}
     </div>
     {hasAside && <div class="mx-auto w-full max-w-[18rem] lg:max-w-none"><slot name="aside" /></div>}
