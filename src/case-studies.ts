@@ -45,41 +45,42 @@ export const caseStudies: CaseStudy[] = [
  * The two case studies, step by step. Shown on the Case studies index; the
  * detail pages link back to it rather than repeating it.
  */
-export const comparison: { step: string; wafer: string; legal: string }[] = [
+export const comparison: { step: string; meaning: string; wafer: string; legal: string }[] = [
   {
     step: "Start with the people",
+    meaning: "Sit with the people who do the work before anyone proposes a design.",
     wafer: "A mind map and a system map with the four photo engineers before any design.",
     legal: "Hallway interviews with the legal team before any tool search.",
   },
   {
-    step: "Prove the measurement",
-    wafer: "A gage study on the overlay metrology tool before trusting a single number.",
-    legal: "A 60-page golden document before trusting a single transcribed page.",
+    step: "Find the improvements that matter to the business",
+    meaning: "Verify with the teams that these improvements are correct and complete.",
+    wafer: "An objective agreed with photo engineering: low-volume overlay within 10 percent of the high-volume product, with rework and tool capacity as the secondary measures.",
+    legal: "Four outputs the legal team named as immediately useful: every provider, a sourced timeline, problems and medications, and a keyword index.",
   },
   {
-    step: "Take the constraints from the room",
+    step: "Identify the constraints as early as possible",
+    meaning: "Find the critical but often overlooked constraints: security, scalability, observability.",
     wafer: "The high-volume product must not be touched. The engineers must own the groups.",
     legal: "Nothing leaves the building. Nothing unverifiable goes to court.",
   },
   {
-    step: "Make the smallest change that fits",
+    step: "Make targeted changes toward the ultimate goal",
+    meaning: "Change as little as required for each step.",
     wafer: "One deterministic change inside a control system the team already ran.",
     legal: "Small deterministic steps in code, with the model doing one narrow job.",
   },
   {
-    step: "Prove it before it ships",
-    wafer: "Ten new tests, and all 179 existing tests still passing, unmodified.",
-    legal: "Tests on all the Python, and the golden document run every night.",
+    step: "Validate the solution as you go, reviewing with the business",
+    meaning: "Small changes with review help uncover missed requirements and constraints as early as possible.",
+    wafer: "A gage study before trusting the data, ten new tests with all 179 existing tests still passing, then a month on live product with the engineers watching the results.",
+    legal: "Tests on all the Python, the 60-page golden document the team assembled run every night, and every output checked against its source page.",
   },
   {
-    step: "Hand it over to stay",
+    step: "Include the teams in every step for full ownership",
+    meaning: "Identify the teams who will own the solution and use their experience and judgment to drive it.",
     wafer: "Alerts, a safe fallback, and five minutes of training for the engineers.",
     legal: "Provenance in every file, and a skill so a two-person team can extend it.",
-  },
-  {
-    step: "What it left behind",
-    wafer: "Still in production twenty years later, in four countries.",
-    legal: "A local, deterministic starting point the team owns outright.",
   },
 ];
 

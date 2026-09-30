@@ -27,7 +27,7 @@ const pair = [wafer, legal];
   <section class="border-b border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="why-heading">
     <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
       <div class="lg:col-span-3">
-        <p class="eyebrow">The hidden cost of pre-mature solutions</p>
+        <p class="eyebrow">The hidden cost of premature solutions</p>
         <h2 id="why-heading" class="mt-4 text-3xl sm:text-4xl">
           Everyone knows process matters. So why am I talking about this so much?
         </h2>
@@ -43,14 +43,17 @@ const pair = [wafer, legal];
           This is what I bring to a project: the ability to move quickly without losing the discipline that produces results. People bring experience, creativity, and ideas to a project, and the best solutions often emerge along the way. I make the process transparent, give teams room to explore and take the occasional tangent, while keeping the work anchored to the business requirements and constraints. The goal is not to make people follow a process—it is to create enough structure for the project to run smoothly while giving the team genuine ownership of the solution.
         </p>
       </div>
-      <aside class="self-start rounded-lg border border-stone-200 bg-white p-6 sm:p-8 lg:col-span-2">
+      <aside class="self-start rounded-lg border border-stone-200 bg-white p-6 sm:p-8 lg:sticky lg:top-24 lg:col-span-2">
         <h3 class="text-lg font-semibold">What "the process" means here</h3>
         <ol class="mt-4 divide-y divide-stone-200">
           {
             comparison.map((row, i) => (
               <li class="flex gap-3 py-3 first:pt-0 last:pb-0">
                 <span class="w-6 shrink-0 font-serif text-lg font-semibold text-accent-700">{i + 1}</span>
-                <span class="leading-7 text-stone-700">{row.step}</span>
+                <div>
+                  <p class="font-semibold text-brand-950">{row.step}</p>
+                  <p class="mt-0.5 text-sm leading-6 text-stone-600">{row.meaning}</p>
+                </div>
               </li>
             ))
           }
