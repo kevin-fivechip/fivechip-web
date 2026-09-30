@@ -79,7 +79,7 @@ export const comparison: { step: string; meaning: string; wafer: string; legal: 
   {
     step: "Include the teams in every step for full ownership",
     meaning: "Identify the teams who will own the solution and use their experience and judgment to drive it.",
-    wafer: "Alerts, a safe fallback, and five minutes of training for the engineers.",
+    wafer: "Alerts, a safe fallback, and training for the engineers.",
     legal: "Provenance in every file, and a skill so a two-person team can extend it.",
   },
 ];
