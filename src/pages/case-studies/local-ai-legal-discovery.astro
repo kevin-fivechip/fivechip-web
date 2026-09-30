@@ -1,0 +1,471 @@
+---
+import CallToAction from "../../components/CallToAction.astro";
+import Container from "../../components/Container.astro";
+import DiscoveryPipelineCore from "../../components/diagrams/DiscoveryPipelineCore.astro";
+import DiscoveryPipelineOutputs from "../../components/diagrams/DiscoveryPipelineOutputs.astro";
+import Icon from "../../components/Icon.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { caseStudies } from "../../case-studies";
+
+// Facts on this page come from Kevin's September 2026 meetup talk about the project.
+const study = caseStudies.find((item) => item.slug === "local-ai-legal-discovery")!;
+const wafer = caseStudies.find((item) => item.slug === "low-volume-run-to-run-control")!;
+
+const quotes = [
+  "I'm going to spend eight hours reading these child interview documents, trying to identify whether any instances of fear were noted by the provider.",
+  "I can't have it guessing or hallucinating. If I say something in court and it cannot be verified, that's a serious problem.",
+  "I will not send confidential information to ChatGPT. These are sensitive documents and I cannot risk that.",
+  "We've been talking about AI. Some guys tried to explain it. It went over our heads.",
+];
+
+const requirements = [
+  { name: "Deterministic", text: "The same inputs produce the same results, every time." },
+  { name: "Provenance", text: "Every artifact records how it was made: source, model, version, configuration and processing logic." },
+  { name: "Traceable", text: "Every extracted item points back to its source document and page." },
+  { name: "Testable", text: "Automated coverage of extraction and processing, so models and logic can be upgraded safely." },
+  { name: "Regenerable", text: "When a model, prompt or rule changes, provenance says exactly which documents to reprocess." },
+  { name: "Secure", text: "The number one concern, and the one that could stop the project before it started." },
+];
+
+const constraints = [
+  "Free and open source, end to end",
+  "Runs entirely on the machine. Air-gap capable, no external services",
+  "Develops and runs on one MacBook M1 with 32 GB of memory",
+  "Simple enough for a two-person team, one developer and one manager, who also support the core legal application",
+  "About a month to a working solution",
+];
+
+const asks = [
+  "A list of every provider named in the documents",
+  "A time-ordered list of events, each with its source document and page",
+  "A table of problems and medications",
+  "A keyword index for the things the team must never miss, with the exact page for each hit",
+];
+
+const attempts = [
+  {
+    title: "Upload the PDFs straight into a local RAG chat",
+    text: "AnythingLLM and PrivateGPT on top of Ollama, with Mistral 7B and Qwen 2.5. I varied chunk size, overlap, temperature, chat mode and prompts exhaustively. Results were varied, incomplete and often wrong. The documents were too dense, OCR errors poisoned the answers, and relationships across documents were unreliable. Temperature 0 and query mode were needed for any determinism at all.",
+    lesson: "I needed accurate text from these image PDFs before going any further.",
+  },
+  {
+    title: "Convert PDF to text with Unstructured.io",
+    text: "An open-source ETL for messy documents. Adding document-specific configuration and prompts improved things, and for the first time I could trace a bad answer back to its cause. But the per-document-type prompt engineering grew complicated fast, tables inside tables came out unusable, and OCR still made mistakes on the highest-quality setting. A \"printed on\" date being read as the appointment date was the kind of error that ended it.",
+    lesson: "Hard stop. Every document carries the same kinds of information: who, what, when, where, why. If I could get a 100% accurate transcription, standardizing it was a job for code, not prompts.",
+  },
+  {
+    title: "A vision model that only transcribes, and Python that does the rest",
+    text: "Unstructured's own documentation pointed the way: for scanned documents with hard layouts, use a vision language model. I gave qwen2.5-VL a deliberately narrow prompt: reproduce exactly what is printed, don't correct, don't infer, write [illegible] rather than guess, never reorder rows. At temperature 0 it produced faithful Markdown page after page. Once every document was accurate text, turning it into a common \"canonical\" shape was ordinary, testable Python.",
+    lesson: "Use AI for the one thing code can't do, then let code do everything it can.",
+  },
+];
+
+const guardrails = [
+  {
+    title: "A golden document, run nightly",
+    text: "The team assembled a 60-page PDF from the worst of the worst. Its verified transcription is a permanent test case that runs every night, because a prompt tweak or a settings change can silently degrade transcription.",
+  },
+  {
+    title: "Model settings treated as engineering",
+    text: "Temperature 0 for determinism. A mild repeat penalty of 1.1, because medical records legitimately repeat themselves and a harsher penalty changes the words. A three-second cooldown between pages so the laptop's GPU doesn't mangle a transcription under contention.",
+  },
+  {
+    title: "The right model, not the biggest",
+    text: "The 7B vision model was promising; the 32B version was needed for pages where the model has to reason over a large area, and it is borderline on the hardware. Local models also need to be asked for what they were trained to produce: this one writes Markdown, so asking for JSON was a mistake.",
+  },
+  {
+    title: "Provenance in every file",
+    text: "Each output starts with a record of its source file and hash, document type, model name and parameters, generation time and page count. When anything changes, the pipeline knows what to regenerate.",
+  },
+  {
+    title: "An AI skill so the team can extend it",
+    text: "Adding a new document type is a five-stage, checklisted procedure captured as a skill for AI-assisted development, so the two-person team can extend the pipeline without me. It insists on scrubbing personal information after the vision step.",
+  },
+];
+
+const results = [
+  { name: "Deterministic", text: "Yes, for all practical purposes. The vision model can add stray spaces or pipes; the canonical step normalizes them." },
+  { name: "Provenance", text: "Yes. Every document records what produced it." },
+  { name: "Traceable", text: "Yes. Source file and page are 100% accurate." },
+  { name: "Testable", text: "Yes. Tests on all the Python, the golden PDF for the vision step, more model tests as needed." },
+  { name: "Regenerable", text: "Yes, and with provenance it can be automated." },
+  { name: "Free, open source, local only", text: "Yes, on a single MacBook M1." },
+  { name: "Maintainable by two people", text: "Yes, with the skill and checklist." },
+];
+---
+
+<BaseLayout
+  title={study.title}
+  description="How a county legal team's rules, nothing confidential leaves the building and nothing unverifiable goes to court, shaped a local, deterministic AI pipeline for scanned records."
+>
+  <PageHeader eyebrow="Case study" title={study.title} intro={study.summary}>
+    <dl slot="aside" class="grid grid-cols-2 gap-x-6 gap-y-5 text-sm lg:grid-cols-1">
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Client</dt>
+        <dd class="mt-1 text-stone-700">{study.client}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Role</dt>
+        <dd class="mt-1 text-stone-700">{study.role}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Timeline</dt>
+        <dd class="mt-1 text-stone-700">About a month to a working pipeline</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">Stack</dt>
+        <dd class="mt-1 text-stone-700">Python, Ollama, Qwen vision and text models, Markdown. All local.</dd>
+      </div>
+    </dl>
+  </PageHeader>
+
+  <article>
+    <section class="py-16 sm:py-20" aria-labelledby="start-heading">
+      <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+        <div class="lg:col-span-3">
+          <p class="eyebrow">How it started</p>
+          <h2 id="start-heading" class="mt-4 text-3xl sm:text-4xl">A lunch conversation, and a room full of boxes.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            I was finishing a contract with a legal team of more than a hundred people when someone described,
+            over lunch, how they prepared a case: boxes of scanned records, read line by line, with notes taken by
+            hand. Every time a record was updated, the reading started over. It sounded horrible, and solvable.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            I knew there were AI tools for document analysis. I also knew I didn't have nearly enough
+            information to start looking at them. That is the classic mistake. So I asked whether anyone would
+            show me the documents after lunch.
+          </p>
+        </div>
+        <aside class="self-start rounded-lg border border-stone-200 bg-paper p-6 sm:p-8 lg:col-span-2">
+          <h3 class="text-lg font-semibold">What the documents looked like</h3>
+          <ul class="mt-4 divide-y divide-stone-200">
+            {
+              [
+                "A 160-page medical record, and a 65-page child protective services file. Potentially hundreds more like them.",
+                "Every PDF was a scan with no text layer. Nothing could be searched.",
+                "Format changed page to page: tables inside tables, summaries spanning years of appointments, hand-typed notes with typos.",
+                "Crooked and cut-off scans, redactions, and cursive handwriting.",
+              ].map((item) => (
+                <li class="flex gap-3 py-3 first:pt-0 last:pb-0">
+                  <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                  <span class="leading-7 text-stone-700">{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="discovery-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Discovery before technology</p>
+          <h2 id="discovery-heading" class="mt-4 text-3xl sm:text-4xl">Interviews first. Not a tool search, not an AI chat.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Before touching a model I spent time with the people who do this work, in working sessions and in
+            the hallway. What they said set the requirements better than any specification would have.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-6 sm:grid-cols-2">
+          {
+            quotes.map((quote) => (
+              <li class="rounded-lg border border-stone-200 bg-white p-6">
+                <blockquote class="font-serif text-lg leading-8 text-brand-950">“{quote}”</blockquote>
+                <p class="mt-3 text-sm text-stone-500">Hallway conversation</p>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-10 max-w-3xl">
+          <p class="text-lg leading-8 text-stone-600">
+            Two things were non-negotiable: confidential documents would not go to any outside service, and
+            nothing the tool produced could be used unless a person could verify it against the page it came
+            from. The last quote explained the third: earlier attempts to explain AI had gone over people's heads,
+            so whatever I built had to be understandable to the people relying on it.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="problem-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">The problem</p>
+          <h2 id="problem-heading" class="mt-4 text-3xl sm:text-4xl">Define the problem. Find the constraints. Define success.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            A small legal team must process a growing volume of lengthy, complex and frequently changing medical
+            and legal records. Critical information is found by reading every line and taking notes. Updates
+            force the same reading again, which kills productivity and morale, and the information is highly
+            confidential, with strict access control even between lawyers in the same office. The business cost:
+            staff time devoted to intake and review instead of clients.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Security and funding were the two questions that could stall everything, so I took them off the table
+            on day one: the solution would be free, open source and entirely local. That one decision shaped
+            every choice that followed.
+          </p>
+        </div>
+        <div class="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <h3 class="text-lg font-semibold">Requirements</h3>
+            <dl class="mt-4 divide-y divide-stone-200">
+              {
+                requirements.map((item) => (
+                  <div class="py-4 first:pt-0">
+                    <dt class="font-semibold text-brand-950">{item.name}</dt>
+                    <dd class="mt-1 leading-7 text-stone-600">{item.text}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold">Constraints</h3>
+            <ul class="mt-4 divide-y divide-stone-200">
+              {
+                constraints.map((item) => (
+                  <li class="flex gap-3 py-4 first:pt-0">
+                    <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                    <span class="leading-7 text-stone-700">{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <h3 class="mt-10 text-lg font-semibold">What success looked like</h3>
+            <p class="mt-2 leading-7 text-stone-600">
+              Staff spending less time on intake and review and more time with clients. In the interviews, four
+              outputs were named as immediately useful:
+            </p>
+            <ol class="mt-4 space-y-3">
+              {
+                asks.map((item, i) => (
+                  <li class="flex gap-3">
+                    <span class="w-6 shrink-0 font-serif text-lg font-semibold text-accent-700">{i + 1}</span>
+                    <span class="leading-7 text-stone-700">{item}</span>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="attempts-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Three attempts</p>
+          <h2 id="attempts-heading" class="mt-4 text-3xl sm:text-4xl">What didn't work taught me what would.</h2>
+        </div>
+        <ol class="mt-10 space-y-6">
+          {
+            attempts.map((attempt, i) => (
+              <li class="grid gap-4 rounded-lg border border-stone-200 bg-white p-6 sm:p-8 lg:grid-cols-[5rem_1fr] lg:gap-8">
+                <span class="font-serif text-4xl font-semibold tracking-tight text-accent-600" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 class="text-xl font-semibold">{attempt.title}</h3>
+                  <p class="mt-3 leading-7 text-stone-600">{attempt.text}</p>
+                  <p class="mt-4 border-l-2 border-accent-500 pl-4 leading-7 text-brand-950">
+                    <span class="font-semibold">Lesson.</span> {attempt.lesson}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="pipeline-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">The pipeline</p>
+          <h2 id="pipeline-heading" class="mt-4 text-3xl sm:text-4xl">
+            Small, deterministic steps. AI only where it earns its place.
+          </h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The core is four steps. Only one of them uses a model, and that model is asked to do exactly one
+            thing: read what is on the page. Everything after it is configuration and code, which means it can be
+            tested, diffed and reasoned about by the team that owns it.
+          </p>
+        </div>
+        <div class="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <figure class="min-w-0">
+            <div class="overflow-x-auto">
+              <DiscoveryPipelineCore class="max-w-lg" />
+            </div>
+            <figcaption class="mt-4 text-sm leading-6 text-stone-500">
+              Core pipeline. Every document, whatever it looked like on paper, comes out as the same canonical
+              Markdown shape for its type.
+            </figcaption>
+          </figure>
+          <figure class="min-w-0">
+            <div class="overflow-x-auto">
+              <DiscoveryPipelineOutputs class="max-w-lg" />
+            </div>
+            <figcaption class="mt-4 text-sm leading-6 text-stone-500">
+              Outputs. Steps are added as the team asks for them, each a small Python step with a targeted model
+              call where useful.
+            </figcaption>
+          </figure>
+        </div>
+        <div class="mt-12 grid gap-8 lg:grid-cols-3">
+          <div class="border-t-2 border-accent-500 pt-5">
+            <h3 class="text-lg font-semibold">Keyword index</h3>
+            <p class="mt-2 leading-7 text-stone-600">
+              The legal team defined a strict keyword list per category, such as alcohol, housing, fear or
+              non-compliance. Hits from that list are deterministic. The model may add phrases that match a
+              category, but every model hit is labelled as such and carries the verbatim text that triggered it,
+              so it can be checked against the page.
+            </p>
+          </div>
+          <div class="border-t-2 border-accent-500 pt-5">
+            <h3 class="text-lg font-semibold">Document diff</h3>
+            <p class="mt-2 leading-7 text-stone-600">
+              When a record is updated, a plain deterministic diff finds what changed and where. The model writes
+              a short summary of each change on top of that diff, and the raw diff stays in the file for
+              validation. No one rereads 160 pages to find the two that changed.
+            </p>
+          </div>
+          <div class="border-t-2 border-accent-500 pt-5">
+            <h3 class="text-lg font-semibold">Unified case file</h3>
+            <p class="mt-2 leading-7 text-stone-600">
+              Every document in a case merged into one file: a topic index, the people involved, a complete
+              timeline in date order, and the problems and medications table. Each entry names its source file
+              and page, and the timeline entries are the actual transcribed text, not a paraphrase.
+            </p>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="guardrails-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">Keeping it honest</p>
+          <h2 id="guardrails-heading" class="mt-4 text-3xl sm:text-4xl">The guardrails are the product.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            A transcription that is right most of the time is worthless in court. These are the things that make
+            the pipeline trustworthy, and they took as much care as the pipeline itself.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
+          {
+            guardrails.map((item) => (
+              <li class="border-t-2 border-accent-500 pt-5">
+                <h3 class="text-lg font-semibold">{item.title}</h3>
+                <p class="mt-2 leading-7 text-stone-600">{item.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="results-heading">
+      <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+        <div class="lg:col-span-2">
+          <p class="eyebrow">Results</p>
+          <h2 id="results-heading" class="mt-4 text-3xl sm:text-4xl">Were the goals met?</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            All four outputs the team asked for in the interviews are produced: providers, a sourced timeline,
+            problems and medications, and the keyword index. The boxes are indexed, organized and summarized.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            And the question I started with, whether to feed the documents to a chat model, answered itself.
+            With canonical text, retrieval-augmented chat became optional. Standardized, front-loaded chunks
+            made it far better, but a retrieval query returns its top matches and can never promise it found
+            everything. The generated indexes can.
+          </p>
+        </div>
+        <dl class="divide-y divide-stone-200 self-start rounded-lg border border-stone-200 bg-white px-6 lg:col-span-3">
+          {
+            results.map((item) => (
+              <div class="flex gap-4 py-4">
+                <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                <div>
+                  <dt class="font-semibold text-brand-950">{item.name}</dt>
+                  <dd class="mt-1 leading-7 text-stone-600">{item.text}</dd>
+                </div>
+              </div>
+            ))
+          }
+        </dl>
+      </Container>
+    </section>
+
+    <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="takeaways-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">What I took away</p>
+          <h2 id="takeaways-heading" class="mt-4 text-3xl sm:text-4xl">Own the solution.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The determinism requirement and the air-gap constraint pushed the design toward small local models
+            chained together, with ordinary code between them, instead of one large prompt sent to a paid cloud
+            model. That turned out to be a better design, not just a permitted one: each piece can be tested on
+            its own, and the smaller models often gave the most deterministic results. Larger ones think too
+            much.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Vision models are trained to both transcribe and reason. This project used only the first, and that
+            restraint is what made the output trustworthy. The team now has a stable, local starting point for
+            deterministic AI that no vendor can take away or reprice, and my view is that getting most of the
+            benefit from a solution you own beats outsourcing the whole problem while the prices are still
+            subsidized.
+          </p>
+        </div>
+        {
+          study.talk && (
+            <p class="mt-10 flex flex-wrap items-center gap-x-2 border-t border-stone-200 pt-6 text-sm text-stone-600">
+              <span class="font-semibold text-brand-950">Presented at</span>
+              <a
+                href={study.talk.url}
+                rel="noopener"
+                target="_blank"
+                class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600"
+              >
+                {study.talk.name}
+                <Icon name="arrow-up-right" class="size-4" />
+              </a>
+            </p>
+          )
+        }
+      </Container>
+    </section>
+    <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="parallel-heading">
+      <Container>
+        <div class="max-w-3xl">
+          <p class="eyebrow">The same approach, twenty years apart</p>
+          <h2 id="parallel-heading" class="mt-4 text-3xl sm:text-4xl">I ran a wafer fab project the same way in 2005.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Different industry, different stack, same shape: start with the people, prove the measurement, take
+            the constraints from the room, make the smallest change that fits, prove it, and hand it over to
+            stay. That system is still in production twenty years later.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            <a
+              href="/case-studies#comparison"
+              class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600"
+            >
+              See the two projects side by side
+              <Icon name="arrow-right" class="size-4" />
+            </a>
+            <a
+              href={`/case-studies/${wafer.slug}`}
+              class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600"
+            >
+              Read the 2005 project
+              <Icon name="arrow-right" class="size-4" />
+            </a>
+          </div>
+        </div>
+      </Container>
+    </section>
+  </article>
+
+  <CallToAction />
+</BaseLayout>

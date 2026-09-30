@@ -9,7 +9,8 @@ interface Props {
 }
 
 const { currentPath } = Astro.props;
-const current = (href: string) => (currentPath === href ? "page" : undefined);
+const current = (href: string) =>
+  currentPath === href || currentPath.startsWith(`${href}/`) ? "page" : undefined;
 // Contact is a button on wide screens and a plain link in the phone menu.
 const desktopLinks = nav.filter((item) => item.href !== "/contact");
 ---

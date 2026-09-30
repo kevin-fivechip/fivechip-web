@@ -1,0 +1,99 @@
+---
+/**
+ * The product-grouping design: a high-volume product shares its recent
+ * lots into a group but keeps using only its own; low-volume products both
+ * share and use the group. Inline SVG, site palette, fits a phone.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const prod = { x: 24, w: 196, h: 72 };
+const pool = { x: 292, w: 172 };
+const gap = 22;
+
+const products = [
+  { title: "High-volume product", lines: ["Many lots a day", "Shares. Never uses."], uses: false },
+  { title: "Low-volume product A", lines: ["Under a lot a day", "Shares and uses"], uses: true },
+  { title: "Low-volume product B", lines: ["Under a lot a day", "Shares and uses"], uses: true },
+];
+
+let y = 50;
+const placed = products.map((p) => {
+  const item = { ...p, y };
+  y += prod.h + gap;
+  return item;
+});
+const poolTop = placed[0].y;
+const poolBottom = placed[placed.length - 1].y + prod.h;
+const height = poolBottom + 24;
+---
+
+<svg
+  viewBox={`0 0 480 ${height}`}
+  role="img"
+  aria-labelledby="grouping-title"
+  class:list={["h-auto w-full min-w-[28rem] font-sans", className]}
+>
+  <title id="grouping-title">
+    Product grouping: the high-volume product shares its recent lots into a group but never uses the group's
+    data; each low-volume product both shares into and uses the group, so its recommendations draw on many
+    more recent lots.
+  </title>
+  <defs>
+    <marker id="grp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5 0 10z" class="fill-accent-500" />
+    </marker>
+  </defs>
+
+  <rect x="8" y="8" width="464" height={height - 16} rx="8" class="fill-paper stroke-stone-300" stroke-dasharray="5 4" />
+  <text x="24" y="30" class="fill-stone-500" font-size="11" font-style="italic">
+    One group per tool-stage, configured by the photo engineers.
+  </text>
+
+  {
+    placed.map((p) => (
+      <>
+        <rect
+          x={prod.x}
+          y={p.y}
+          width={prod.w}
+          height={prod.h}
+          rx="6"
+          class:list={[p.uses ? "fill-white stroke-stone-300" : "fill-brand-50 stroke-brand-300"]}
+          stroke-width="1.25"
+        />
+        <text x={prod.x + 14} y={p.y + 22} class="fill-brand-950" font-size="13" font-weight="600">
+          {p.title}
+        </text>
+        {p.lines.map((line, j) => (
+          <text x={prod.x + 14} y={p.y + 41 + j * 16} class="fill-stone-600" font-size="11">
+            {line}
+          </text>
+        ))}
+        <line
+          x1={prod.x + prod.w + 4}
+          y1={p.y + prod.h / 2}
+          x2={pool.x - 4}
+          y2={p.y + prod.h / 2}
+          class="stroke-accent-500"
+          stroke-width="1.5"
+          marker-start={p.uses ? "url(#grp-arrow)" : undefined}
+          marker-end="url(#grp-arrow)"
+        />
+      </>
+    ))
+  }
+
+  <rect x={pool.x} y={poolTop} width={pool.w} height={poolBottom - poolTop} rx="6" class="fill-accent-50 stroke-accent-300" stroke-width="1.25" />
+  <text x={pool.x + 12} y={poolTop + 24} class="fill-brand-950" font-size="13" font-weight="600">Group: recent lots</text>
+  <text x={pool.x + 12} y={poolTop + 46} class="fill-stone-600" font-size="11">One row per product</text>
+  <text x={pool.x + 12} y={poolTop + 62} class="fill-stone-600" font-size="11">and stage, two flags:</text>
+  <text x={pool.x + 12} y={poolTop + 86} class="fill-brand-950" font-size="11" font-weight="600">share lots to group</text>
+  <text x={pool.x + 12} y={poolTop + 106} class="fill-brand-950" font-size="11" font-weight="600">use group lots</text>
+  <text x={pool.x + 12} y={poolTop + 134} class="fill-stone-600" font-size="11">A recommendation for a</text>
+  <text x={pool.x + 12} y={poolTop + 149} class="fill-stone-600" font-size="11">low-volume lot now draws</text>
+  <text x={pool.x + 12} y={poolTop + 164} class="fill-stone-600" font-size="11">on the whole group.</text>
+</svg>

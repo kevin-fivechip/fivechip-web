@@ -16,7 +16,8 @@ export const site = {
 
 export const nav = [
   { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
+  { href: "/engagements", label: "Engagements" },
+  { href: "/case-studies", label: "Case studies" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -77,7 +78,7 @@ export const services: Service[] = [
   },
 ];
 
-/** Shown as a plain line on the Services page. */
+/** Shown as a plain line on the Engagements page. */
 export const technologies = [
   "Java",
   "Spring Boot",
