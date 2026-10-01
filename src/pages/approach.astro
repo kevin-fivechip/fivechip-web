@@ -1,9 +1,16 @@
 ---
 import CallToAction from "../components/CallToAction.astro";
 import Container from "../components/Container.astro";
+import Icon from "../components/Icon.astro";
 import PageHeader from "../components/PageHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../site";
+
+const questions = [
+  "Who experiences these problems? Can I see them firsthand and talk to the people who use these systems every day?",
+  "How will we know the problem is solved? Are there other issues that users have simply come to accept as normal?",
+  "What's the simplest change we can make to deliver meaningful improvement and build momentum for the project?",
+];
 
 // Six Sigma's DMAIC cycle, applied to software.
 const steps = [
@@ -22,8 +29,8 @@ const steps = [
   <PageHeader eyebrow="My approach" title="A pragmatic Six Sigma approach to software." />
 
   <section class="py-16 sm:py-20" aria-label="Approach">
-    <Container>
-      <div class="max-w-3xl">
+    <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
         <p class="text-lg leading-8 text-stone-600">
           Anyone who has worked with me knows one of my most frequently asked questions when a meeting gets bogged down in competing solutions: "What problem are we trying to solve, exactly?"
         </p>
@@ -40,7 +47,22 @@ const steps = [
           I usually do this behind the scenes, rebuilding enough structure for the team to move forward without turning the project into a formal process exercise. I’ve found that teams embrace the approach when it feels like problem-solving rather than process. Eventually, people start to recognize the pattern: the questions come first, the solutions follow.
         </p>
       </div>
-      <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
+      <aside class="self-start rounded-lg border border-stone-200 bg-paper p-6 sm:p-8 lg:sticky lg:top-24 lg:col-span-2">
+        <h3 class="text-lg font-semibold">Questions I ask before writing code</h3>
+        <ul class="mt-5 divide-y divide-stone-200">
+          {
+            questions.map((question) => (
+              <li class="flex gap-3 py-4 first:pt-0 last:pb-0">
+                <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                <span class="leading-7 text-stone-700">{question}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </Container>
+    <Container>
+      <ol class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
         {
           steps.map((step) => (
             <li class="border-t-2 border-accent-500 pt-6">
@@ -53,6 +75,16 @@ const steps = [
           ))
         }
       </ol>
+      <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 border-t border-stone-200 pt-6 text-sm">
+        <a href="/engagements" class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">
+          What this looks like in an engagement
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+        <a href="/case-studies" class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">
+          The same approach, twenty years apart
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+      </div>
     </Container>
   </section>
 

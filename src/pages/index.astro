@@ -9,12 +9,6 @@ import { services, site } from "../site";
 
 const featured = caseStudies[0];
 
-const questions = [
-  "Who experiences these problems? Can I see them firsthand and talk to the people who use these systems every day?",
-  "How will we know the problem is solved? Are there other issues that users have simply come to accept as normal?",
-  "What's the simplest change we can make to deliver meaningful improvement and build momentum for the project?",
-];
-
 ---
 
 <BaseLayout>
@@ -45,18 +39,16 @@ const questions = [
           part.
         </p>
         <div class="mt-10 flex flex-col gap-3 sm:flex-row">
-          <a href="#problem" class="btn-primary">
-            Why Problem Before Solution is Critical
-          </a>
-          <a href="/approach" class="btn-secondary">How I work</a>
+          <a href="#problem" class="btn-primary">Why problem first</a>
+          <a href="/approach" class="btn-secondary">My approach</a>
         </div>
       </div>
     </Container>
   </section>
 
-  <section id="problem" class="bg-paper py-20 sm:py-24" aria-labelledby="why-heading">
-    <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
-      <div class="lg:col-span-3">
+  <section id="problem" class="scroll-mt-16 bg-paper py-20 sm:py-24" aria-labelledby="why-heading">
+    <Container>
+      <div class="max-w-3xl">
         <p class="eyebrow">Why problem first</p>
         <h2 id="why-heading" class="mt-4 text-3xl sm:text-4xl">
           Most software projects don't fail because of the technology.
@@ -68,31 +60,17 @@ const questions = [
           time to understand their needs, challenges and priorities before turning to technology.
         </p>
         <p class="mt-6 text-lg leading-8 text-stone-600">
-          I do that in person wherever I can. I meet teams where the work happens and watch the system being
-          used, because the people on the ground usually know things that never make it into a proposal or a
-          statement of work. The best answers are often already in the room. Once the problem is correctly
-          defined, the pace changes: what starts slow becomes very fast, because we're building toward a
-          clearly understood need with a way to verify we've met it.
+          I do that in person wherever I can, because the people on the ground usually know things that never
+          make it into a proposal or a statement of work. The best answers are often already in the room. I
+          learned this in semiconductor manufacturing, where a wrong assumption scraps wafers you can hold in
+          your hand. Once the problem is correctly defined, the pace changes: what starts slow becomes very
+          fast, because we're building toward a clearly understood need with a way to verify we've met it.
         </p>
-        <p class="mt-6 text-lg leading-8 text-stone-600">
-          I learned this in semiconductor manufacturing, where a wrong assumption scraps wafers you can hold in
-          your hand. Changes there were measured, scrutinized and proven before they were deployed. I build
-          software the same way.
-        </p>
+        <a href="/approach" class="mt-8 inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">
+          How I do it: My approach
+          <Icon name="arrow-right" class="size-4" />
+        </a>
       </div>
-      <aside class="self-start rounded-lg border border-stone-200 bg-white p-6 sm:p-8 lg:col-span-2">
-        <h3 class="text-lg font-semibold">Questions I ask before writing code</h3>
-        <ul class="mt-5 divide-y divide-stone-200">
-          {
-            questions.map((question) => (
-              <li class="flex gap-3 py-4 first:pt-0 last:pb-0">
-                <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
-                <span class="leading-7 text-stone-700">{question}</span>
-              </li>
-            ))
-          }
-        </ul>
-      </aside>
     </Container>
   </section>
 

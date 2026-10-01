@@ -39,25 +39,6 @@ const credentials = [
   "Systems Thinking and Risk Management, University of St. Thomas",
   "Temporal Certified Trainer",
 ];
-
-const values = [
-  {
-    title: "Problem before solution",
-    text: "We agree on what's wrong before any code is written.",
-  },
-  {
-    title: "Straight talk",
-    text: "If politics, budget, or technology is holding a project back, I'll say so, and bring options.",
-  },
-  {
-    title: "Small, safe steps",
-    text: "Working releases early, each with a way to roll back.",
-  },
-  {
-    title: "You own everything",
-    text: "Your code, your accounts, and your data. No lock-in.",
-  },
-];
 ---
 
 <BaseLayout
@@ -117,25 +98,6 @@ const values = [
             <li class="flex gap-3 border-t border-stone-200 py-4">
               <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
               <span class="leading-7 text-stone-700">{credential}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </Container>
-  </section>
-
-  <section class="py-16 sm:py-20" aria-labelledby="values-heading">
-    <Container>
-      <div class="max-w-2xl">
-        <p class="eyebrow">What you can expect</p>
-        <h2 id="values-heading" class="mt-4 text-3xl sm:text-4xl">How every engagement runs.</h2>
-      </div>
-      <ul class="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
-        {
-          values.map((value) => (
-            <li class="border-t-2 border-accent-500 pt-5">
-              <h3 class="text-lg font-semibold">{value.title}</h3>
-              <p class="mt-2 leading-7 text-stone-600">{value.text}</p>
             </li>
           ))
         }

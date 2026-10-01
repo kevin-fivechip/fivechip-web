@@ -6,6 +6,22 @@ import PageHeader from "../components/PageHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { services, site, technologies } from "../site";
 
+// What a client can expect on any engagement, whatever its shape.
+const expectations = [
+  {
+    title: "Straight talk",
+    text: "If politics, budget, or technology is holding a project back, I'll say so, and bring options.",
+  },
+  {
+    title: "Small, safe steps",
+    text: "Working releases early, each with a way to roll back.",
+  },
+  {
+    title: "You own everything",
+    text: "Your code, your accounts, and your data. No lock-in.",
+  },
+];
+
 const engagements = [
   {
     title: "Discovery",
@@ -17,7 +33,7 @@ const engagements = [
   },
   {
     title: "Advisory",
-    text: "Architecture reviews, AI training for your team if you need it, or help getting a stalled project moving.",
+    text: "Architecture reviews, or AI training for your team if you need it.",
   },
 ];
 ---
@@ -29,7 +45,7 @@ const engagements = [
   <PageHeader
     eyebrow="Engagements"
     title="Define the problems. Then build the solutions."
-    intro="Every engagement starts with the people who use, support and depend on the existing systems. I work alongside your teams to understand those systems, identify the real problems and define what success looks like. Only then do I architect and build, with your team involved throughout so they understand, own and can evolve the result."
+    intro="Every engagement starts with the people who use, support and depend on the existing systems, and your team stays involved through to the end so they understand, own and can evolve the result. Here is the work I take on, and the ways we can start."
   />
 
   <section class="py-4 sm:py-8">
@@ -58,6 +74,25 @@ const engagements = [
           </article>
         ))
       }
+    </Container>
+  </section>
+
+  <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="expect-heading">
+    <Container>
+      <div class="max-w-2xl">
+        <p class="eyebrow">What you can expect</p>
+        <h2 id="expect-heading" class="mt-4 text-3xl sm:text-4xl">How every engagement runs.</h2>
+      </div>
+      <ul class="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-3">
+        {
+          expectations.map((item) => (
+            <li class="border-t-2 border-accent-500 pt-5">
+              <h3 class="text-lg font-semibold">{item.title}</h3>
+              <p class="mt-2 leading-7 text-stone-600">{item.text}</p>
+            </li>
+          ))
+        }
+      </ul>
     </Container>
   </section>
 
