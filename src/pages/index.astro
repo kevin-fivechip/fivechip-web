@@ -15,14 +15,6 @@ const questions = [
   "What's the simplest change we can make to deliver meaningful improvement and build momentum for the project?",
 ];
 
-// Six Sigma's DMAIC cycle, applied to software.
-const steps = [
-  { letter: "D", title: "Define", text: "Align on the problem, the desired outcome, and how we will know it's fixed." },
-  { letter: "M", title: "Measure", text: "Establish a baseline of how the system works today and understand why it was designed that way." },
-  { letter: "A", title: "Analyze", text: "Challenge assumptions about the problem, and validate them with evidence." },
-  { letter: "I", title: "Improve", text: "Build incrementally, measure the results, and validate improvements with real users." },
-  { letter: "C", title: "Control", text: "Treat security, observability and logging as first-class requirements." },
-];
 ---
 
 <BaseLayout>
@@ -44,7 +36,7 @@ const steps = [
           </a>
         </div>
         <h1 id="hero-heading" class="mt-5 text-4xl leading-[1.1] sm:text-5xl lg:text-6xl">
-          Understand the problem before building the solution.
+          Define the problem before proposing any solutions.
         </h1>
         <p class="mt-6 max-w-2xl text-lg leading-8 text-stone-600">
           {site.name} is the independent practice of {site.owner}: thirty years of engineering, from
@@ -53,11 +45,10 @@ const steps = [
           part.
         </p>
         <div class="mt-10 flex flex-col gap-3 sm:flex-row">
-          <a href="/contact" class="btn-primary">
-            Tell me about the problem
-            <Icon name="arrow-right" class="size-5" />
+          <a href="#problem" class="btn-primary">
+            Why Problem Before Solution is Critical
           </a>
-          <a href="#approach" class="btn-secondary">How I work</a>
+          <a href="/approach" class="btn-secondary">How I work</a>
         </div>
       </div>
     </Container>
@@ -149,32 +140,6 @@ const steps = [
           <Icon name="arrow-right" class="size-4 transition-transform group-hover:translate-x-0.5" />
         </span>
       </a>
-    </Container>
-  </section>
-
-  <section id="approach" class="scroll-mt-16 border-t border-stone-200 bg-paper py-20 sm:py-24" aria-labelledby="approach-heading">
-    <Container>
-      <div class="max-w-2xl">
-        <p class="eyebrow">How I work</p>
-        <h2 id="approach-heading" class="mt-4 text-3xl sm:text-4xl">A Six Sigma approach to software.</h2>
-        <p class="mt-4 text-lg leading-8 text-stone-600">
-          DMAIC comes from my Six Sigma training in semiconductor manufacturing. It keeps every project pointed
-          at the real problem and proves the fix before it ships.
-        </p>
-      </div>
-      <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
-        {
-          steps.map((step) => (
-            <li class="border-t-2 border-accent-500 pt-6">
-              <span class="font-serif text-4xl font-semibold text-brand-950" aria-hidden="true">
-                {step.letter}
-              </span>
-              <h3 class="mt-2 text-lg font-semibold">{step.title}</h3>
-              <p class="mt-2 leading-7 text-stone-600">{step.text}</p>
-            </li>
-          ))
-        }
-      </ol>
     </Container>
   </section>
 

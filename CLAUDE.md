@@ -11,7 +11,7 @@ The public website for Five Chip LLC, a software consultancy. It's a static Astr
 ## Layout
 
 - **Where things live:**
-  - One page per URL in `src/pages/*.astro`. Pages: Home, Engagements (`/engagements`, how an engagement runs; it was briefly called Services, no redirect kept), Case studies (`/case-studies` index plus one page per study under `src/pages/case-studies/<slug>.astro`), About, Contact, Privacy.
+  - One page per URL in `src/pages/*.astro`. Pages: Home, My approach (`/approach`, the DMAIC method; moved off the home page, which links to it from the hero), Engagements (`/engagements`, how an engagement runs; it was briefly called Services, no redirect kept), Case studies (`/case-studies` index plus one page per study under `src/pages/case-studies/<slug>.astro`), About, Contact, Privacy.
   - Shared facts and copy (business name, email, LinkedIn, nav, services list) in `src/site.ts`. Case-study listing data (title, client, summary, tags, talk link), the step-by-step `comparison` of the two studies and the `otherWork` resume list all live in `src/case-studies.ts`; the index page, the home-page teaser and the detail pages' cross-links read it. Detail pages are hand-written. The index leads with the comparison on purpose: the two studies are twenty years apart to show the method, not the technology, is what carries a project.
   - Case-study diagrams are inline SVG components in `src/components/diagrams/`, drawn with the site's palette (Tailwind `fill-*`/`stroke-*` classes) and a vertical layout so they stay legible on phones. Never embed slide images or screenshots from client work.
   - `<head>`/SEO tags in `src/layouts/BaseLayout.astro`, pieces in `src/components/`.
