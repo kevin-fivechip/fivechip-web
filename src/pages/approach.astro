@@ -1,0 +1,92 @@
+---
+import CallToAction from "../components/CallToAction.astro";
+import Container from "../components/Container.astro";
+import Icon from "../components/Icon.astro";
+import PageHeader from "../components/PageHeader.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../site";
+
+const questions = [
+  "Who experiences these problems? Can I see them firsthand and talk to the people who use these systems every day?",
+  "How will we know the problem is solved? Are there other issues that users have simply come to accept as normal?",
+  "What's the simplest change we can make to deliver meaningful improvement and build momentum for the project?",
+];
+
+// Six Sigma's DMAIC cycle, applied to software.
+const steps = [
+  { letter: "D", title: "Define", text: "Align on the problem, the desired outcome, and how we will know it's fixed. [No Solutions]" },
+  { letter: "M", title: "Measure", text: "Establish a baseline of how the system works today and understand why it was designed that way. [No Solutions]" },
+  { letter: "A", title: "Analyze", text: "Challenge assumptions about the problem, and validate them with evidence. [No Solutions]" },
+  { letter: "I", title: "Improve", text: "Build incrementally, measure the results, and validate improvements with real users." },
+  { letter: "C", title: "Control", text: "Treat security, observability and logging as first-class requirements." },
+];
+---
+
+<BaseLayout
+  title="My approach"
+  description={`How ${site.owner} applies Six Sigma's DMAIC cycle to software: define the problem before proposing any solutions.`}
+>
+  <PageHeader eyebrow="My approach" title="A pragmatic Six Sigma approach to software." />
+
+  <section class="py-16 sm:py-20" aria-label="Approach">
+    <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
+        <p class="text-lg leading-8 text-stone-600">
+          Anyone who has worked with me knows one of my most frequently asked questions when a meeting gets bogged down in competing solutions: "What problem are we trying to solve, exactly?"
+        </p>
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          After years of asking that question, I've yet to see a group debating competing solutions give the same answer. That's usually the source of the disagreement! People are often optimizing for entirely different problems, each assuming everyone else shares their understanding of what needs to be solved.
+        </p>
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          If I’m fortunate enough to be involved from the beginning of a project, I establish a “define the problem, no solutions yet” approach from day one. The problems we identify become a living document throughout the project—not a requirements artifact that gets filed away once development begins, but the foundation we continually use to define success, evaluate decisions, and make sure the work remains focused on the business need. As we learn more, the problems and our understanding of them can evolve, but they remain the reference point for everything that follows.
+        </p>
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          When I join a project that has fallen behind or isn’t meeting the business need, I start with what has already been done and map it back to the DMAIC process. This helps me find the gaps in understanding, identify the questions that haven’t been asked, and bring the work back into alignment.
+        </p>
+        <p class="mt-6 text-lg leading-8 text-stone-600">
+          I usually do this behind the scenes, rebuilding enough structure for the team to move forward without turning the project into a formal process exercise. I’ve found that teams embrace the approach when it feels like problem-solving rather than process. Eventually, people start to recognize the pattern: the questions come first, the solutions follow.
+        </p>
+      </div>
+      <aside class="self-start rounded-lg border border-stone-200 bg-paper p-6 sm:p-8 lg:sticky lg:top-24 lg:col-span-2">
+        <h3 class="text-lg font-semibold">Questions I ask before writing code</h3>
+        <ul class="mt-5 divide-y divide-stone-200">
+          {
+            questions.map((question) => (
+              <li class="flex gap-3 py-4 first:pt-0 last:pb-0">
+                <Icon name="check" class="mt-1 size-5 shrink-0 text-accent-600" />
+                <span class="leading-7 text-stone-700">{question}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </Container>
+    <Container>
+      <ol class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
+        {
+          steps.map((step) => (
+            <li class="border-t-2 border-accent-500 pt-6">
+              <span class="font-serif text-4xl font-semibold text-brand-950" aria-hidden="true">
+                {step.letter}
+              </span>
+              <h3 class="mt-2 text-lg font-semibold">{step.title}</h3>
+              <p class="mt-2 leading-7 text-stone-600">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 border-t border-stone-200 pt-6 text-sm">
+        <a href="/engagements" class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">
+          What this looks like in an engagement
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+        <a href="/case-studies" class="inline-flex items-center gap-1 font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">
+          The same approach, twenty years apart
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+      </div>
+    </Container>
+  </section>
+
+  <CallToAction />
+</BaseLayout>

@@ -25,14 +25,14 @@ const desktopLinks = nav.filter((item) => item.href !== "/contact");
       <Logo />
     </a>
 
-    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+    <nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
       {
         desktopLinks.map((item) => (
           <a
             href={item.href}
             aria-current={current(item.href)}
             class:list={[
-              "border-b-2 px-3 py-2 text-sm font-medium transition-colors hover:text-brand-950",
+              "border-b-2 px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors hover:text-brand-950",
               current(item.href) ? "border-accent-500 text-brand-950" : "border-transparent text-stone-600",
             ]}
           >
@@ -40,12 +40,12 @@ const desktopLinks = nav.filter((item) => item.href !== "/contact");
           </a>
         ))
       }
-      <a href="/contact" aria-current={current("/contact")} class="btn-primary ml-4 px-4 py-2 text-sm">
+      <a href="/contact" aria-current={current("/contact")} class="btn-primary ml-4 px-4 py-2 text-sm whitespace-nowrap">
         Get in touch
       </a>
     </nav>
 
-    <details class="group relative md:hidden">
+    <details class="group relative lg:hidden">
       <summary
         class="flex size-10 cursor-pointer list-none items-center justify-center rounded-md text-brand-950 hover:bg-paper focus-visible:outline-2 focus-visible:outline-accent-500 [&::-webkit-details-marker]:hidden"
         aria-label="Menu"
