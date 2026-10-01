@@ -13,10 +13,10 @@ const study = caseStudies.find((item) => item.slug === "local-ai-legal-discovery
 const wafer = caseStudies.find((item) => item.slug === "low-volume-run-to-run-control")!;
 
 const quotes = [
-  "I'm going to spend eight hours reading these child interview documents, trying to identify whether any instances of fear were noted by the provider.",
-  "I can't have it guessing or hallucinating. If I say something in court and it cannot be verified, that's a serious problem.",
-  "I will not send confidential information to ChatGPT. These are sensitive documents and I cannot risk that.",
-  "We've been talking about AI. Some guys tried to explain it. It went over our heads.",
+  "I'm going to spend eight hours reading these child interview documents, trying to identify whether any instances of fear were noted by the providers.",
+  "I can't have it guessing or hallucinating. Lawyers have already been accused of using AI in court, and opposing counsel has asked them to verify their statements.",
+  "I cannot send information to ChatGPT! These are sensitive documents that contain hospital records, abuse details and mental health assessments. No way.",
+  "We've been talking about AI. Some guys tried to explain it. It went over our heads. He just used a bunch of jargon.",
 ];
 
 const requirements = [
@@ -55,9 +55,9 @@ const attempts = [
     lesson: "Hard stop. Every document carries the same kinds of information: who, what, when, where, why. If I could get a 100% accurate transcription, standardizing it was a job for code, not prompts.",
   },
   {
-    title: "A vision model that only transcribes, and Python that does the rest",
-    text: "Unstructured's own documentation pointed the way: for scanned documents with hard layouts, use a vision language model. I gave qwen2.5-VL a deliberately narrow prompt: reproduce exactly what is printed, don't correct, don't infer, write [illegible] rather than guess, never reorder rows. At temperature 0 it produced faithful Markdown page after page. Once every document was accurate text, turning it into a common \"canonical\" shape was ordinary, testable Python.",
-    lesson: "Use AI for the one thing code can't do, then let code do everything it can.",
+    title: "A vision model that only transcribes, combined with Python that standardizes and makes targeted AI calls.",
+    text: "Unstructured's own documentation pointed the way: for scanned documents with complex layouts, use a vision language model. I gave qwen2.5-VL a deliberately narrow prompt: \"Reproduce exactly what is printed. Don't correct, don't infer, write [illegible] rather than guess, never reorder rows.\" At temperature 0 it produced faithful Markdown page after page. Once every document was accurate text, turning it into a common \"canonical\" shape was ordinary, testable Python.",
+    lesson: "Use Python to pre-process as much as possible. Use AI for things code can't do. Merge the results in a deterministic way.",
   },
 ];
 
@@ -125,15 +125,15 @@ const results = [
       <Container class="grid gap-12 lg:grid-cols-5 lg:gap-16">
         <div class="lg:col-span-3">
           <p class="eyebrow">How it started</p>
-          <h2 id="start-heading" class="mt-4 text-3xl sm:text-4xl">A lunch conversation, and a room full of boxes.</h2>
+          <h2 id="start-heading" class="mt-4 text-3xl sm:text-4xl">A lunch conversation about TV shows where lawyers get legal documents dumped on them.</h2>
           <p class="mt-6 text-lg leading-8 text-stone-600">
             I was finishing a contract with a legal team of more than a hundred people when someone described,
-            over lunch, how they prepared a case: boxes of scanned records, read line by line, with notes taken by
+            over lunch, how they prepared for a case: hundreds of scanned PDF documents, read line by line, with notes taken by
             hand. Every time a record was updated, the reading started over. It sounded horrible, and solvable.
           </p>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            I knew there were AI tools for document analysis. I also knew I didn't have nearly enough
-            information to start looking at them. That is the classic mistake. So I asked whether anyone would
+            I knew there were AI tools for document analysis. I also knew from experience that I didn't have nearly enough
+            information to start looking yet. Looking for solutions too early is the classic mistake. So I asked whether anyone would
             show me the documents after lunch.
           </p>
         </div>
@@ -161,11 +161,10 @@ const results = [
     <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="discovery-heading">
       <Container>
         <div class="max-w-3xl">
-          <p class="eyebrow">Discovery before technology</p>
-          <h2 id="discovery-heading" class="mt-4 text-3xl sm:text-4xl">Interviews first. Not a tool search, not an AI chat.</h2>
+          <p class="eyebrow">Define the Problem—No Solutions!</p>
+          <h2 id="discovery-heading" class="mt-4 text-3xl sm:text-4xl">Interviews first, not a solution search</h2>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            Before touching a model I spent time with the people who do this work, in working sessions and in
-            the hallway. What they said set the requirements better than any specification would have.
+            Before thinking of specific solutions, I spent time with the people who do this work, in working sessions and hallway conversations. I asked them to walk me through how they worked with these documents.
           </p>
         </div>
         <ul class="mt-10 grid gap-6 sm:grid-cols-2">
@@ -173,7 +172,6 @@ const results = [
             quotes.map((quote) => (
               <li class="rounded-lg border border-stone-200 bg-white p-6">
                 <blockquote class="font-serif text-lg leading-8 text-brand-950">“{quote}”</blockquote>
-                <p class="mt-3 text-sm text-stone-500">Hallway conversation</p>
               </li>
             ))
           }
@@ -192,19 +190,14 @@ const results = [
     <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="problem-heading">
       <Container>
         <div class="max-w-3xl">
-          <p class="eyebrow">The problem</p>
-          <h2 id="problem-heading" class="mt-4 text-3xl sm:text-4xl">Define the problem. Find the constraints. Define success.</h2>
+          <p class="eyebrow">Define requirements—Still No Solutions!</p>
+          <h2 id="problem-heading" class="mt-4 text-3xl sm:text-4xl">Summarize the problem, known constraints, and definition of success.</h2>
           <p class="mt-6 text-lg leading-8 text-stone-600">
             A small legal team must process a growing volume of lengthy, complex and frequently changing medical
             and legal records. Critical information is found by reading every line and taking notes. Updates
             force the same reading again, which kills productivity and morale, and the information is highly
             confidential, with strict access control even between lawyers in the same office. The business cost:
             staff time devoted to intake and review instead of clients.
-          </p>
-          <p class="mt-6 text-lg leading-8 text-stone-600">
-            Security and funding were the two questions that could stall everything, so I took them off the table
-            on day one: the solution would be free, open source and entirely local. That one decision shaped
-            every choice that followed.
           </p>
         </div>
         <div class="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
@@ -256,8 +249,13 @@ const results = [
     <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="attempts-heading">
       <Container>
         <div class="max-w-3xl">
-          <p class="eyebrow">Three attempts</p>
-          <h2 id="attempts-heading" class="mt-4 text-3xl sm:text-4xl">What didn't work taught me what would.</h2>
+          <p class="eyebrow">Analyze and Prototype Solutions</p>
+          <h2 id="attempts-heading" class="mt-4 text-3xl sm:text-4xl">The constraints guided the design.</h2>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            Security and funding were the two questions that could stall everything, so I took them off the table
+            immediately: the solution would be free, open source and entirely local. That one decision shaped every
+            choice that followed.
+          </p>
         </div>
         <ol class="mt-10 space-y-6">
           {
@@ -283,32 +281,35 @@ const results = [
     <section class="border-t border-stone-200 py-16 sm:py-20" aria-labelledby="pipeline-heading">
       <Container>
         <div class="max-w-3xl">
-          <p class="eyebrow">The pipeline</p>
+          <p class="eyebrow">Solution—Python/AI Pipeline</p>
           <h2 id="pipeline-heading" class="mt-4 text-3xl sm:text-4xl">
             Small, deterministic steps. AI only where it earns its place.
           </h2>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            The core is four steps. Only one of them uses a model, and that model is asked to do exactly one
+            The core is four steps (<a href="#figure-core" class="font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">Figure 1</a>). Only one of them uses a vision language model, and that model is asked to do exactly one
             thing: read what is on the page. Everything after it is configuration and code, which means it can be
             tested, diffed and reasoned about by the team that owns it.
           </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The client's requirements were met by taking <code>canonical.md</code> from the core steps and processing it to generate the documents that meet them (<a href="#figure-outputs" class="font-medium text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-600">Figure 2</a>).
+          </p>
         </div>
         <div class="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <figure class="min-w-0">
+          <figure id="figure-core" class="min-w-0 scroll-mt-24">
             <div class="overflow-x-auto">
               <DiscoveryPipelineCore class="max-w-lg" />
             </div>
             <figcaption class="mt-4 text-sm leading-6 text-stone-500">
-              Core pipeline. Every document, whatever it looked like on paper, comes out as the same canonical
+              <span class="font-semibold text-brand-950">Figure 1.</span> Core pipeline. Every document, whatever it looked like on paper, comes out as the same canonical
               Markdown shape for its type.
             </figcaption>
           </figure>
-          <figure class="min-w-0">
+          <figure id="figure-outputs" class="min-w-0 scroll-mt-24">
             <div class="overflow-x-auto">
               <DiscoveryPipelineOutputs class="max-w-lg" />
             </div>
             <figcaption class="mt-4 text-sm leading-6 text-stone-500">
-              Outputs. Steps are added as the team asks for them, each a small Python step with a targeted model
+              <span class="font-semibold text-brand-950">Figure 2.</span> Outputs. Steps are added as the team asks for them, each a small Python step with a targeted model
               call where useful.
             </figcaption>
           </figure>
@@ -319,7 +320,7 @@ const results = [
             <p class="mt-2 leading-7 text-stone-600">
               The legal team defined a strict keyword list per category, such as alcohol, housing, fear or
               non-compliance. Hits from that list are deterministic. The model may add phrases that match a
-              category, but every model hit is labelled as such and carries the verbatim text that triggered it,
+              category, but every model hit is labeled as such and carries the verbatim text that triggered it,
               so it can be checked against the page.
             </p>
           </div>
@@ -346,12 +347,8 @@ const results = [
     <section class="border-t border-stone-200 bg-paper py-16 sm:py-20" aria-labelledby="guardrails-heading">
       <Container>
         <div class="max-w-3xl">
-          <p class="eyebrow">Keeping it honest</p>
-          <h2 id="guardrails-heading" class="mt-4 text-3xl sm:text-4xl">The guardrails are the product.</h2>
-          <p class="mt-6 text-lg leading-8 text-stone-600">
-            A transcription that is right most of the time is worthless in court. These are the things that make
-            the pipeline trustworthy, and they took as much care as the pipeline itself.
-          </p>
+          <p class="eyebrow">Solution—Validation and Control</p>
+          <h2 id="guardrails-heading" class="mt-4 text-3xl sm:text-4xl">Determinism and guardrails are the product.</h2>
         </div>
         <ul class="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
           {
@@ -372,14 +369,14 @@ const results = [
           <p class="eyebrow">Results</p>
           <h2 id="results-heading" class="mt-4 text-3xl sm:text-4xl">Were the goals met?</h2>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            All four outputs the team asked for in the interviews are produced: providers, a sourced timeline,
-            problems and medications, and the keyword index. The boxes are indexed, organized and summarized.
+            Yes. All four outputs the team asked for in the interviews are produced: a provider list, a sourced timeline,
+            problems and medications, and the keyword index. Each is easily traced to its source PDF, received during discovery.
           </p>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            And the question I started with, whether to feed the documents to a chat model, answered itself.
-            With canonical text, retrieval-augmented chat became optional. Standardized, front-loaded chunks
-            made it far better, but a retrieval query returns its top matches and can never promise it found
-            everything. The generated indexes can.
+            Lesson: Had I jumped to solutions, I might have spent a lot of time investigating cloud-based approaches before really understanding the users' problems and concerns.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            This solution keeps the control in the hands of the team. It can also be modified to meet future requirements, such as uploading to a database or using a secure cloud-based approach.
           </p>
         </div>
         <dl class="divide-y divide-stone-200 self-start rounded-lg border border-stone-200 bg-white px-6 lg:col-span-3">
@@ -402,20 +399,19 @@ const results = [
       <Container>
         <div class="max-w-3xl">
           <p class="eyebrow">What I took away</p>
-          <h2 id="takeaways-heading" class="mt-4 text-3xl sm:text-4xl">Own the solution.</h2>
+          <h2 id="takeaways-heading" class="mt-4 text-3xl sm:text-4xl">There is no substitute for direct interaction with clients. Without open, candid conversations, I never would have arrived at this solution.</h2>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            The determinism requirement and the air-gap constraint pushed the design toward small local models
+            The determinism requirement and the air-gap constraint (discovered early in the project) pushed the design toward small local models
             chained together, with ordinary code between them, instead of one large prompt sent to a paid cloud
-            model. That turned out to be a better design, not just a permitted one: each piece can be tested on
-            its own, and the smaller models often gave the most deterministic results. Larger ones think too
-            much.
+            model. That turned out to be a better design at this time, not just a permitted one.
           </p>
           <p class="mt-6 text-lg leading-8 text-stone-600">
-            Vision models are trained to both transcribe and reason. This project used only the first, and that
-            restraint is what made the output trustworthy. The team now has a stable, local starting point for
-            deterministic AI that no vendor can take away or reprice, and my view is that getting most of the
-            benefit from a solution you own beats outsourcing the whole problem while the prices are still
-            subsidized.
+            But the bigger takeaway was that they really liked this approach. The generated documents fit
+            their existing policies for document control and security. They uploaded them into their current
+            case management system, meeting all the requirements for document retention and tracking with no extra work.
+          </p>
+          <p class="mt-6 text-lg leading-8 text-stone-600">
+            The team now has a stable, local starting point for deterministic AI that no vendor can take away or reprice. If they later gain trust in AI services, or if new systems appear that they are comfortable with, this solution can be extended.
           </p>
         </div>
         {
